@@ -1,0 +1,73 @@
+.navbar{
+  padding: 20px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title{
+  font-size: 3rem;
+  color: #22801e;
+  font-weight: 700;
+}
+
+.nav-menu{
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  font-size: 1rem;
+  color: black;
+}
+
+.nav-right{
+  display: flex;
+  align-items: center;
+}
+
+.nav-right i{
+  font-size: 1.3rem;
+  margin-right: 2rem;
+}
+
+.nav-right i:hover{
+  color: #22801e;
+}
+
+.nav-right button{
+  background: transparent;
+  font-size: 1rem;
+  color: rgb(0, 0, 0);
+  border: 1px solid #22801e;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.navbar button:hover{
+  background-color: #22801e;
+}
+
+.cart-icon {
+  position: relative;
+  
+}
+
+
+
+.dot {
+  position: absolute;
+  top: -8px;
+  right: 11px;
+  background-color: green;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease-in;
+}
