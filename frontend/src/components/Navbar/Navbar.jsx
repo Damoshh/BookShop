@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { StoreContext } from '../../context/StoreContext';
+import { handleLogout } from '../../utils/auth';
 
 export const Navbar = ({
   theme, 
@@ -18,12 +19,7 @@ export const Navbar = ({
   const cartItemCount = getCartItemCount ? getCartItemCount() : 0;
 
   const handleSignOut = () => {
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('isAdmin');  
-    localStorage.removeItem('sessionToken');
-    setIsLoggedIn(false);
-    setUserEmail('');
-    navigate('/');  
+    handleLogout(navigate, setIsLoggedIn, setUserEmail);
   };
 
   const handleLogin = () => {
