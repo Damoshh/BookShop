@@ -4,8 +4,8 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
-import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import StoreContextProvider from "./context/StoreContext";
 import Footer from "./components/Footer/Footer";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
@@ -14,6 +14,43 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const LoginPopupWrapper = (props) => {
   const navigate = useNavigate();
   return <LoginPopup {...props} navigate={navigate} />;
+};
+
+// Wrapper component to handle conditional rendering of Navbar and Footer
+const LayoutWrapper = ({ children, showLogin, setShowLogin, setIsLoggedIn, setUserEmail, initialState, 
+                        theme, setTheme, isLoggedIn, userEmail, setInitialState }) => {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
+
+  return (
+    <>
+      {showLogin && (
+        <LoginPopupWrapper 
+          setShowLogin={setShowLogin} 
+          setIsLoggedIn={setIsLoggedIn}
+          setUserEmail={setUserEmail}
+          initialState={initialState}
+        />
+      )}
+      
+      {!isAdminPage && (
+        <Navbar 
+          theme={theme} 
+          setTheme={setTheme} 
+          setShowLogin={setShowLogin}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          userEmail={userEmail}
+          setUserEmail={setUserEmail}
+          setInitialState={setInitialState}
+        />
+      )}
+      
+      {children}
+      
+      {!isAdminPage && <Footer />}
+    </>
+  );
 };
 
 function App() {
@@ -36,35 +73,32 @@ function App() {
   return (
     <StoreContextProvider>
       <Router>
-        <div className={`App ${theme}`}>
-          {showLogin ? (
-            <LoginPopupWrapper 
-              setShowLogin={setShowLogin} 
-              setIsLoggedIn={setIsLoggedIn}
-              setUserEmail={setUserEmail}
-              initialState={initialState}
-            />
-          ) : null}
-          
-          <Navbar 
-            theme={theme} 
-            setTheme={setTheme} 
-            setShowLogin={setShowLogin}
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-            userEmail={userEmail}
-            setUserEmail={setUserEmail}
-            setInitialState={setInitialState}
-          />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/order" element={<PlaceOrder />} />
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-            <Route path="*" element={<h2>404 - Page Not Found</h2>} />
-          </Routes>
-        </div>
-        <Footer />
+        <LayoutWrapper
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          setIsLoggedIn={setIsLoggedIn}
+          setUserEmail={setUserEmail}
+          initialState={initialState}
+          theme={theme}
+          setTheme={setTheme}
+          isLoggedIn={isLoggedIn}
+          userEmail={userEmail}
+          setInitialState={setInitialState}
+        >
+          <div className={`App ${theme}`}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/order" element={<PlaceOrder />} />
+              <Route path="/admin/*" element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<h2>404 - Page Not Found</h2>} />
+            </Routes>
+          </div>
+        </LayoutWrapper>
       </Router>
     </StoreContextProvider>
   );

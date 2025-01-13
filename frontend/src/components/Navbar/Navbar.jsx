@@ -14,8 +14,8 @@ export const Navbar = ({
   setInitialState 
 }) => {
   const navigate = useNavigate();
-  const { getCartItemCount } = useContext(StoreContext);
-  const cartItemCount = getCartItemCount();
+  const { cartItems, getCartItemCount } = useContext(StoreContext);
+  const cartItemCount = getCartItemCount ? getCartItemCount() : 0;
 
   const handleSignOut = () => {
     localStorage.removeItem('userEmail');

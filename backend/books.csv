@@ -1,2 +1,3 @@
 _id,title,author,price,category,description,coverImg
-1,kau dan aku,adam,25,Seram,asfas
+1,The Great Book,John Doe,29.99,Seram,A wonderful story,/images/book1.jpg
+2,Another Book,Jane Smith,19.99,Non-Fiction,An interesting read,/images/book2.jpg
