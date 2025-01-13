@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -21,6 +22,7 @@ public class AdminHandler implements HttpHandler {
     private static final String ADMIN_CSV = "backend/admins.csv";
     private Map<String, String> activeSessionTokens = new HashMap<>();
 
+    @SuppressWarnings({"ConvertToTryWithResources", "CallToPrintStackTrace"})
     public AdminHandler() {
         try {
             File file = new File(ADMIN_CSV);
@@ -37,6 +39,14 @@ public class AdminHandler implements HttpHandler {
             System.err.println("Error initializing admins.csv: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public boolean validateAuthToken(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return activeSessionTokens.containsValue(token);
+        }
+        return false;
     }
 
     @Override
@@ -61,6 +71,7 @@ public class AdminHandler implements HttpHandler {
         return java.util.UUID.randomUUID().toString();
     }
 
+    @SuppressWarnings("unchecked")
     private void handleAdminLogin(HttpExchange exchange) throws IOException {
         try {
             InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
@@ -97,9 +108,8 @@ public class AdminHandler implements HttpHandler {
                 System.out.println("Admin login failed - invalid credentials");
                 sendResponse(exchange, 401, "Invalid admin credentials");
             }
-        } catch (Exception e) {
+        } catch (IOException | ParseException e) {
             System.out.println("Error in admin login: " + e.getMessage());
-            e.printStackTrace();
             sendResponse(exchange, 400, "Invalid request");
         }
     }
@@ -127,7 +137,6 @@ public class AdminHandler implements HttpHandler {
             }
         } catch (IOException e) {
             System.err.println("Error reading admin CSV: " + e.getMessage());
-            e.printStackTrace();
         }
         return false;
     }
@@ -142,6 +151,7 @@ public class AdminHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
         JSONObject response = new JSONObject();
         response.put("message", message);

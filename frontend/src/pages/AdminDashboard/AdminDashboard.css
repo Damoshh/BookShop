@@ -1,0 +1,215 @@
+.admin-dashboard {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .admin-header {
+    margin-bottom: 2rem;
+  }
+  
+  .admin-header h1 {
+    color: #333;
+    font-size: 2rem;
+  }
+  
+  /* Tabs */
+  .admin-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+  }
+  
+  .tab-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: #f0f0f0;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .tab-button:hover {
+    background: #e0e0e0;
+  }
+  
+  .tab-button.active {
+    background: #22801e;
+    color: white;
+  }
+  
+  /* Orders Section */
+  .orders-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .orders-list {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .order-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .status.processing {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  
+  .status.completed {
+    background: #dcfce7;
+    color: #166534;
+  }
+  
+  /* Books Section */
+  .books-section {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  .add-book-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .add-book-form h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .add-book-form form {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .add-book-form input,
+  .add-book-form textarea,
+  .add-book-form select {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .add-book-form input:focus,
+  .add-book-form textarea:focus,
+  .add-book-form select:focus {
+    border-color: #22801e;
+    outline: none;
+  }
+  
+  .add-book-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .add-book-form button {
+    padding: 0.75rem;
+    background: #22801e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-book-form button:hover:not(:disabled) {
+    background: #1a6517;
+  }
+  
+  .add-book-form button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .books-list {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .books-list h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .book-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+  
+  .book-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .book-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  .book-info {
+    padding: 1rem;
+  }
+  
+  .book-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .book-info .author {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+  }
+  
+  .book-info .price {
+    color: #22801e;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+  }

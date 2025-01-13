@@ -26,7 +26,6 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("current_theme", theme);
-    // Check initial login state
     const email = localStorage.getItem('userEmail');
     if (email) {
       setIsLoggedIn(true);
@@ -64,8 +63,8 @@ function App() {
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />
           </Routes>
-          <Footer />
         </div>
+        <Footer />
       </Router>
     </StoreContextProvider>
   );

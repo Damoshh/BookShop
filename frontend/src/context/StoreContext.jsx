@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import { book_list } from "./BookList";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
@@ -56,7 +55,6 @@ const StoreContextProvider = (props) => {
         }, 0);
     };
 
-    // Get cart item count
     const getCartItemCount = () => {
         return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
     };
@@ -65,10 +63,9 @@ const StoreContextProvider = (props) => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
         const total = calculateTotal();
         setCartTotal(total);
-    }, [cartItems]); // `book_list` is not needed here since it doesn't change
+    }, [cartItems]); 
     
 
-    // Filter books by category
     const getBooksByCategory = (category) => {
         if (category === 'All') return book_list;
         return book_list.filter(book => book.category === category);

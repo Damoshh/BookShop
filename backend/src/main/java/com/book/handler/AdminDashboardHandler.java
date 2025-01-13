@@ -1,16 +1,18 @@
 package com.book.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+import org.json.simple.JSONObject;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler; 
+
 public class AdminDashboardHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Set CORS headers
+        
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, OPTIONS");
         exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -20,7 +22,7 @@ public class AdminDashboardHandler implements HttpHandler {
             return;
         }
 
-        // Check for admin session token
+        
         String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
         if (authHeader == null || !validateAdminSession(authHeader)) {
             sendResponse(exchange, 401, "Unauthorized");
@@ -35,14 +37,13 @@ public class AdminDashboardHandler implements HttpHandler {
     }
 
     private boolean validateAdminSession(String authHeader) {
-        // TODO: Implement proper session validation
         return authHeader.startsWith("Bearer ");
     }
 
+    @SuppressWarnings("unchecked")
     private void handleGetDashboardData(HttpExchange exchange) throws IOException {
         JSONObject dashboardData = new JSONObject();
-        // Add dashboard data here
-        dashboardData.put("totalBooks", 100);  // Example data
+        dashboardData.put("totalBooks", 100);  
         dashboardData.put("totalUsers", 50);
         dashboardData.put("totalOrders", 25);
 
@@ -59,6 +60,7 @@ public class AdminDashboardHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
         JSONObject response = new JSONObject();
         response.put("message", message);

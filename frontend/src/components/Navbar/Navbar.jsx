@@ -20,6 +20,7 @@ export const Navbar = ({
   const handleSignOut = () => {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('isAdmin');  
+    localStorage.removeItem('sessionToken');
     setIsLoggedIn(false);
     setUserEmail('');
     navigate('/');  

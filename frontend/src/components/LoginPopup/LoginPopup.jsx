@@ -36,17 +36,20 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
 
         const data = await response.json();
         
+        // In LoginPopup.jsx - update the handleSubmit function
         if (response.ok) {
           setIsLoggedIn(true);
           setUserEmail(formData.email);
           localStorage.setItem('userEmail', formData.email);
-          if (isAdminLogin) {
-              localStorage.setItem('isAdmin', 'true');
-              navigate('/admin'); // Add this line to redirect to admin dashboard
+          if (isAdminLogin && response.ok) {
+            localStorage.setItem('isAdmin', 'true');
+            localStorage.setItem('sessionToken', data.sessionToken);
+            setIsLoggedIn(true);
+            navigate('/admin');
           }
           alert(data.message);
           setShowLogin(false);
-      } else {
+        } else {
             throw new Error(data.message || 'Login failed');
         }
     } catch (error) {

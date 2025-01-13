@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -28,21 +29,20 @@ public class BookHandler implements HttpHandler {
             file.getParentFile().mkdirs();
             
             if (!file.exists()) {
-                FileWriter fw = new FileWriter(file);
-                fw.write("_id,title,author,price,category,description,coverImg\n");
-                // Add some sample books if needed
-                fw.close();
+                try (FileWriter fw = new FileWriter(file)) {
+                    fw.write("_id,title,author,price,category,description,coverImg\n");
+                    
+                }
                 System.out.println("Created new books.csv file at: " + file.getAbsolutePath());
             }
         } catch (IOException e) {
             System.err.println("Error initializing books.csv: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Set CORS headers
+        
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type,Authorization");
@@ -77,16 +77,15 @@ public class BookHandler implements HttpHandler {
                 default:
                     sendResponse(exchange, 405, "Method not allowed");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             sendResponse(exchange, 500, "Internal server error");
         }
     }
 
     private boolean isAdminRequest(HttpExchange exchange) {
-        // Get Authorization header
+        
         String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
-        // You should implement proper token validation here
+        
         return authHeader != null && authHeader.startsWith("Bearer ");
     }
 
@@ -95,9 +94,9 @@ public class BookHandler implements HttpHandler {
         sendJsonResponse(exchange, 200, books);
     }
 
+    @SuppressWarnings("unchecked")
     private void handleAddBook(HttpExchange exchange) throws IOException {
         try {
-            // Read request body
             InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder requestBody = new StringBuilder();
@@ -107,33 +106,31 @@ public class BookHandler implements HttpHandler {
                 requestBody.append(line);
             }
 
-            // Parse JSON
             JSONParser parser = new JSONParser();
             JSONObject bookData = (JSONObject) parser.parse(requestBody.toString());
             
-            // Generate new ID
+            
             String newId = UUID.randomUUID().toString();
             
-            // Write to CSV
-            FileWriter fw = new FileWriter(BOOKS_CSV, true);
-            fw.write(String.format("%s,%s,%s,%.2f,%s,%s,%s\n",
-                newId,
-                bookData.get("title"),
-                bookData.get("author"),
-                Double.parseDouble(bookData.get("price").toString()),
-                bookData.get("category"),
-                bookData.get("description").toString().replace(",", ";"),
-                bookData.get("coverImg")
-            ));
-            fw.close();
+            try ( 
+                    FileWriter fw = new FileWriter(BOOKS_CSV, true)) {
+                fw.write(String.format("%s,%s,%s,%.2f,%s,%s,%s\n",
+                        newId,
+                        bookData.get("title"),
+                        bookData.get("author"),
+                        Double.parseDouble(bookData.get("price").toString()),
+                        bookData.get("category"),
+                        bookData.get("description").toString().replace(",", ";"),
+                        bookData.get("coverImg")
+                ));
+            }
 
             JSONObject response = new JSONObject();
             response.put("message", "Book added successfully");
             response.put("id", newId);
             sendJsonResponse(exchange, 200, response);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | NumberFormatException | ParseException e) {
             sendResponse(exchange, 400, "Invalid book data");
         }
     }
@@ -143,7 +140,7 @@ public class BookHandler implements HttpHandler {
         List<String> remainingBooks = new ArrayList<>();
         boolean bookFound = false;
 
-        // Read all books except the one to delete
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_CSV))) {
             String line;
             boolean isFirstLine = true;
@@ -169,7 +166,7 @@ public class BookHandler implements HttpHandler {
             return;
         }
 
-        // Write remaining books back to file
+        
         try (FileWriter writer = new FileWriter(BOOKS_CSV)) {
             for (String line : remainingBooks) {
                 writer.write(line + "\n");
@@ -179,6 +176,7 @@ public class BookHandler implements HttpHandler {
         sendResponse(exchange, 200, "Book deleted successfully");
     }
 
+    @SuppressWarnings("unchecked")
     private JSONArray readBooksFromCsv() {
         JSONArray books = new JSONArray();
         try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_CSV))) {
@@ -197,7 +195,7 @@ public class BookHandler implements HttpHandler {
                     book.put("_id", values[0]);
                     book.put("title", values[1]);
                     book.put("author", values[2]);
-                    book.put("price", Double.parseDouble(values[3]));
+                    book.put("price", Double.valueOf(values[3]));
                     book.put("category", values[4]);
                     book.put("description", values[5].replace(";", ","));
                     book.put("coverImg", values[6]);
@@ -205,7 +203,6 @@ public class BookHandler implements HttpHandler {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return books;
     }
@@ -220,6 +217,7 @@ public class BookHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
         JSONObject response = new JSONObject();
         response.put("message", message);
