@@ -1,6 +1,6 @@
 .footer{
     padding: 1.8rem 4rem;
-    background: #76b0d6;
+    background: #b9bebb;
     color: rgb(0, 0, 0);
 }
 
@@ -78,6 +78,62 @@
   .dark .bottom a::after {
     background: #3bbada;
   }
+
+.newsletter {
+
+    margin-top : 30px;
+}
+
+ /* Style for the form container */
+.newsletter form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Style for the input field */
+.newsletter input[type="email"] {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid transparent; /* Transparent border */
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+  margin-right: 10px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Input field focus effect to show a visible border */
+.newsletter input[type="email"]:focus {
+  border-color: #5b5c5d; /* Visible border color on focus */
+  background-color: white; /* Solid background on focus */
+  outline: none;
+}
+
+/* Style for the submit button */
+.newsletter button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #4e4f51;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.newsletter button[type="submit"]:hover {
+  background-color: #5c5e60;
+}
+
+.Copy {
+  margin-top: 30px;
+  margin-left: 50px;
+  background: #b9bebb;
+}
+
 
 @media screen and (max-width : 800px){
     .footer{
