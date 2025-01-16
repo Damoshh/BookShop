@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+// Profile.jsx
+import React, { useState, useEffect, useContext } from 'react';
 import './Profile.css';
+import { StoreContext } from '../../context/StoreContext';
+import BookItem from '../../components/BookItem/BookItem';
 
-const Profile = ({ userEmail }) => {
+const Profile = ({ userEmail, isLoggedIn, setShowLogin, setInitialState }) => {
+    const { book_list, wishlistItems, toggleWishlistItem } = useContext(StoreContext);
     const [activeTab, setActiveTab] = useState('profile');
     const [userData, setUserData] = useState({
         name: '',
         email: userEmail,
         phone: '',
         address: '',
-        password: ''
     });
 
     useEffect(() => {
-        // Fetch user data when component mounts
         fetchUserData();
     }, [userEmail]);
 
@@ -51,6 +53,9 @@ const Profile = ({ userEmail }) => {
         }
     };
 
+    // Get wishlist items
+    const wishlistBooks = book_list.filter(book => wishlistItems.has(book._id));
+
     return (
         <div className="profile-container">
             <div className="profile-sidebar">
@@ -67,7 +72,7 @@ const Profile = ({ userEmail }) => {
                     Order History
                 </button>
                 <button 
-                    className={activeTab === 'wishlist' ? 'active' : ''} 
+                    className={activeTab === 'wishlist' ? 'active' : 'wishlist-btn'} 
                     onClick={() => setActiveTab('wishlist')}
                 >
                     Wishlist
@@ -118,14 +123,49 @@ const Profile = ({ userEmail }) => {
                 {activeTab === 'orders' && (
                     <div className="order-history">
                         <h2>Order History</h2>
-                        {/* Order history component will go here */}
+                        <div className="empty-orders">
+                            <p>No orders yet</p>
+                        </div>
                     </div>
                 )}
 
                 {activeTab === 'wishlist' && (
-                    <div className="wishlist">
-                        <h2>Wishlist</h2>
-                        {/* Wishlist component will go here */}
+                    <div className="wishlist-section">
+                        <h2 className="wishlist-title">My Wishlist</h2>
+                        {wishlistBooks.length > 0 ? (
+                            <div className="wishlist-books">
+                                {wishlistBooks.map(book => (
+                                    <div key={book._id} className="wishlist-book-item">
+                                        <img 
+                                            src={book.image} 
+                                            alt={book.name}
+                                            className="wishlist-book-image"
+                                        />
+                                        <div className="wishlist-book-info">
+                                            <h3>{book.name}</h3>
+                                            <p className="author">{book.author}</p>
+                                            <p className="category">{book.category}</p>
+                                            <p className="description">{book.description}</p>
+                                            <p className="price">${book.price.toFixed(2)}</p>
+                                        </div>
+                                        <div className="wishlist-book-actions">
+                                            <span 
+                                                className="star-icon active"
+                                                onClick={() => toggleWishlistItem(book._id)}
+                                            >⭐</span>
+                                            <button className="remove-btn">-</button>
+                                            <span className="quantity">2</span>
+                                            <button className="add-btn">+</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty-wishlist">
+                                <h3>Your wishlist is empty</h3>
+                                <p>Browse our collection and start adding your favorite books!</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
