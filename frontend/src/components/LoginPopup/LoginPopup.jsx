@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import './LoginPopup.css'
+import React, { useState } from 'react';
+import './LoginPopup.css';
+import { handleLogin } from '../../utils/auth';
 
-const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, navigate}) => {  const [formData, setFormData] = useState({
+const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, navigate}) => {
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
@@ -13,55 +15,79 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
     e.preventDefault();
     
     if (isSubmitting) return;
-    
+
     try {
         setIsSubmitting(true);
-        
-        const endpoint = isAdminLogin ? '/api/admin/login' : '/api/users';
-        const payload = isAdminLogin ? {
-          email: formData.email,
-          password: formData.password
-        } : {
-          action: initialState === 'Sign Up' ? 'register' : 'login',
-          ...formData
-        };
-        
-        const response = await fetch(`http://localhost:8000${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        });
 
-        const data = await response.json();
-        
-        // In LoginPopup.jsx - update the handleSubmit function
-        if (response.ok) {
-          setIsLoggedIn(true);
-          setUserEmail(formData.email);
-          localStorage.setItem('userEmail', formData.email);
-          if (isAdminLogin && response.ok) {
-            localStorage.setItem('isAdmin', 'true');
-            localStorage.setItem('sessionToken', data.sessionToken);
+        if (isAdminLogin) {
+            // Handle admin login
+            const response = await fetch('http://localhost:8000/api/admin/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    email: formData.email, 
+                    password: formData.password 
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Admin login failed');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('sessionToken', data.token);
+            localStorage.setItem('userEmail', formData.email);
+            localStorage.setItem('userRole', 'admin');
+            
             setIsLoggedIn(true);
+            setUserEmail(formData.email);
             navigate('/admin');
-          }
-          alert(data.message);
-          setShowLogin(false);
         } else {
-            throw new Error(data.message || 'Login failed');
+            // Handle regular user login/signup
+            const payload = {
+                action: initialState === 'Sign Up' ? 'register' : 'login',
+                ...formData
+            };
+
+            const response = await fetch('http://localhost:8000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Authentication failed');
+            }
+
+            const data = await response.json();
+            
+            // Generate a simple token if one is not provided
+            const token = data.token || Math.random().toString(36).substring(7);
+            
+            // Store authentication data
+            localStorage.setItem('sessionToken', token);
+            localStorage.setItem('userEmail', formData.email);
+            localStorage.setItem('userRole', data.role || 'user');
+
+            setIsLoggedIn(true);
+            setUserEmail(formData.email);
         }
+
+        setShowLogin(false);
+        alert(initialState === 'Sign Up' ? 'Account created successfully!' : 'Login successful');
+        
     } catch (error) {
         console.error('Error:', error);
-        alert(error.message || 'An error occurred during login');
+        alert(error.message || 'An unexpected error occurred');
     } finally {
         setIsSubmitting(false);
-        setFormData({
-            name: '',
-            email: '',
-            password: ''
-        });
+        setFormData({ name: '', email: '', password: '' });
     }
   };
 

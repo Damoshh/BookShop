@@ -2,23 +2,27 @@ import React, { useContext } from 'react';
 import './BookItem.css';
 import { StoreContext } from '../../context/StoreContext';
 
-const BookItem = ({ _id, name, price, description, image, author, category }) => {
+const BookItem = ({ _id, name, price, description, image, author, category, isLoggedIn, setShowLogin }) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
 
     const handleAddToCart = (e) => {
         e.stopPropagation();
+        if (!isLoggedIn) {
+            setShowLogin(true);
+            return;
+        }
         addToCart(_id);
     };
 
     const handleRemoveFromCart = (e) => {
         e.stopPropagation();
+        if (!isLoggedIn) {
+            setShowLogin(true);
+            return;
+        }
         removeFromCart(_id);
     };
 
-    // Debug log to check individual book data
-    console.log('Rendering book:', { _id, name, price, image });
-
-    // Fallback image in case the book image is missing
     const fallbackImage = '/placeholder-book.jpg';
 
     return (
@@ -30,27 +34,30 @@ const BookItem = ({ _id, name, price, description, image, author, category }) =>
                     alt={name} 
                     loading="lazy"
                     onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.onerror = null;
                         e.target.src = fallbackImage;
                     }}
                 />
-                {!cartItems[_id] ? (
-                    <i 
-                        className="fa-solid fa-circle-plus" 
-                        onClick={handleAddToCart}
-                    />
-                ) : (
-                    <div className='book-item-counter'>
-                        <i 
-                            className="fa-solid fa-circle-minus"
-                            onClick={handleRemoveFromCart}
-                        />
-                        <span>{cartItems[_id]}</span>
+                {isLoggedIn && (
+                    !cartItems[_id] ? (
                         <i 
                             className="fa-solid fa-circle-plus"
                             onClick={handleAddToCart}
+                            title="Add to cart"
                         />
-                    </div>
+                    ) : (
+                        <div className='book-item-counter'>
+                            <i 
+                                className="fa-solid fa-circle-minus"
+                                onClick={handleRemoveFromCart}
+                            />
+                            <span>{cartItems[_id]}</span>
+                            <i 
+                                className="fa-solid fa-circle-plus"
+                                onClick={handleAddToCart}
+                            />
+                        </div>
+                    )
                 )}
             </div>
             <div className="book-item-info">

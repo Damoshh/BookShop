@@ -3,13 +3,28 @@ import './BookDisplay.css';
 import { StoreContext } from '../../context/StoreContext';
 import BookItem from '../BookItem/BookItem';
 
-const BookDisplay = ({ category }) => {
-    const { book_list, getBooksByCategory } = useContext(StoreContext);
+const BookDisplay = ({ category, isLoggedIn, setShowLogin }) => {
+    const { book_list, getBooksByCategory, loading, error } = useContext(StoreContext);
     
     const displayedBooks = category ? getBooksByCategory(category) : book_list;
 
-    // Debug log to check data
-    console.log('Books to display:', displayedBooks);
+    if (loading) {
+        return (
+            <div className='book-display'>
+                <h2>Top Book Seller</h2>
+                <div className="loading">Loading books...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className='book-display'>
+                <h2>Top Book Seller</h2>
+                <div className="error">Error loading books: {error}</div>
+            </div>
+        );
+    }
 
     return (
         <div className='book-display' id='book-display'>
@@ -20,16 +35,18 @@ const BookDisplay = ({ category }) => {
                         <BookItem 
                             key={book._id}
                             _id={book._id}  
-                            name={book.title || book.name} // Handle both title and name
+                            name={book.title || book.name}
                             description={book.description}
                             price={parseFloat(book.price)}
-                            image={book.coverImg || book.image} // Handle both coverImg and image
+                            image={book.coverImg || book.image}
                             author={book.author}
                             category={book.category}
+                            isLoggedIn={isLoggedIn}
+                            setShowLogin={setShowLogin}
                         />
                     ))
                 ) : (
-                    <div>No books available</div>
+                    <div className="no-books">No books available in this category</div>
                 )}
             </div>
         </div>

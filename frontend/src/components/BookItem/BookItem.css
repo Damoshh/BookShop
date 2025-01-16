@@ -100,6 +100,16 @@
     transition: 0.2s;
 }
 
+/* New styles for disabled cart button */
+.book-item-img-container .disabled-cart-button {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
+
+.book-item-img-container .disabled-cart-button:hover {
+    transform: none !important;
+}
+
 .fa-circle-plus:hover {
     transform: scale(1.1);
 }
