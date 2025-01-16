@@ -10,34 +10,42 @@ const StoreContextProvider = (props) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [cartItems, setCartItems] = useState({});
+    const [wishlistItems, setWishlistItems] = useState(new Set());
 
-    // Load cart items on mount and auth change
+    // Load cart and wishlist items on mount and auth change
     useEffect(() => {
-        const loadCartItems = () => {
+        const loadSavedData = () => {
             try {
                 if (isAuthenticated()) {
                     const savedCart = localStorage.getItem('cart');
                     if (savedCart) {
                         setCartItems(JSON.parse(savedCart));
                     }
+                    
+                    const savedWishlist = localStorage.getItem('wishlist');
+                    if (savedWishlist) {
+                        setWishlistItems(new Set(JSON.parse(savedWishlist)));
+                    }
                 } else {
                     setCartItems({});
+                    setWishlistItems(new Set());
                 }
             } catch (error) {
-                console.error('Error loading cart:', error);
+                console.error('Error loading saved data:', error);
                 setCartItems({});
+                setWishlistItems(new Set());
             }
         };
 
-        loadCartItems();
+        loadSavedData();
 
         // Listen for login state changes
-        window.addEventListener('loginStateChange', loadCartItems);
-        window.addEventListener('storage', loadCartItems);
+        window.addEventListener('loginStateChange', loadSavedData);
+        window.addEventListener('storage', loadSavedData);
         
         return () => {
-            window.removeEventListener('loginStateChange', loadCartItems);
-            window.removeEventListener('storage', loadCartItems);
+            window.removeEventListener('loginStateChange', loadSavedData);
+            window.removeEventListener('storage', loadSavedData);
         };
     }, []);
 
@@ -86,11 +94,33 @@ const StoreContextProvider = (props) => {
         fetchBooks();
     }, []);
 
+    // Wishlist functions
+    const toggleWishlistItem = (bookId) => {
+        if (!isAuthenticated()) return;
+        
+        setWishlistItems(prev => {
+            const newWishlist = new Set(prev);
+            if (newWishlist.has(bookId)) {
+                newWishlist.delete(bookId);
+            } else {
+                newWishlist.add(bookId);
+            }
+            // Save to localStorage
+            localStorage.setItem('wishlist', JSON.stringify([...newWishlist]));
+            return newWishlist;
+        });
+    };
+    
+    const isInWishlist = (bookId) => {
+        return wishlistItems.has(bookId);
+    };
+
     const getBooksByCategory = (category) => {
         if (!category || category === 'All') return book_list;
         return book_list.filter(book => book.category === category);
     };
 
+    // Cart functions
     const addToCart = (itemId) => {
         if (!isAuthenticated()) return;
         setCartItems(prev => ({
@@ -123,13 +153,23 @@ const StoreContextProvider = (props) => {
         }
     }, [cartItems]);
 
+    // Save wishlist to localStorage whenever it changes
+    useEffect(() => {
+        if (isAuthenticated()) {
+            localStorage.setItem('wishlist', JSON.stringify([...wishlistItems]));
+        }
+    }, [wishlistItems]);
+
     const contextValue = {
         book_list,
         loading,
         error,
         cartItems,
+        wishlistItems,
         addToCart,
         removeFromCart,
+        toggleWishlistItem,
+        isInWishlist,
         getBooksByCategory,
         refreshBooks: fetchBooks,
         getCartItemCount
