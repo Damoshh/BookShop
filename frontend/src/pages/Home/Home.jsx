@@ -8,7 +8,7 @@ const Home = ({ isLoggedIn, setShowLogin }) => {
   const [category, setCategory] = useState('All');
 
   return (
-    <div>
+    <div className='home'>
       <Header />
       <ExploreBook category={category} setCategory={setCategory} />
       <BookDisplay 
