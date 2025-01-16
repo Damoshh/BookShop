@@ -2,12 +2,14 @@ import React, { useContext } from 'react';
 import './BookItem.css';
 import { StoreContext } from '../../context/StoreContext';
 
-const BookItem = ({ _id, name, price, description, image, author, category, isLoggedIn, setShowLogin }) => {
+const BookItem = ({ _id, name, price, description, image, author, category, isLoggedIn, setShowLogin, setInitialState }) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
 
     const handleAddToCart = (e) => {
         e.stopPropagation();
         if (!isLoggedIn) {
+            alert('Please login first to add items to cart');
+            setInitialState('Login');
             setShowLogin(true);
             return;
         }
@@ -17,6 +19,8 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
     const handleRemoveFromCart = (e) => {
         e.stopPropagation();
         if (!isLoggedIn) {
+            alert('Please login first to modify cart');
+            setInitialState('Login');
             setShowLogin(true);
             return;
         }
@@ -38,26 +42,25 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
                         e.target.src = fallbackImage;
                     }}
                 />
-                {isLoggedIn && (
-                    !cartItems[_id] ? (
+                {/* Show add button for both logged in and logged out users */}
+                {!cartItems[_id] ? (
+                    <i 
+                        className="fa-solid fa-circle-plus"
+                        onClick={handleAddToCart}
+                        title={isLoggedIn ? "Add to cart" : "Login to add to cart"}
+                    />
+                ) : (
+                    <div className='book-item-counter'>
+                        <i 
+                            className="fa-solid fa-circle-minus"
+                            onClick={handleRemoveFromCart}
+                        />
+                        <span>{cartItems[_id]}</span>
                         <i 
                             className="fa-solid fa-circle-plus"
                             onClick={handleAddToCart}
-                            title="Add to cart"
                         />
-                    ) : (
-                        <div className='book-item-counter'>
-                            <i 
-                                className="fa-solid fa-circle-minus"
-                                onClick={handleRemoveFromCart}
-                            />
-                            <span>{cartItems[_id]}</span>
-                            <i 
-                                className="fa-solid fa-circle-plus"
-                                onClick={handleAddToCart}
-                            />
-                        </div>
-                    )
+                    </div>
                 )}
             </div>
             <div className="book-item-info">

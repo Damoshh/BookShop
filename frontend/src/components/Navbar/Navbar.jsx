@@ -2,8 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { StoreContext } from '../../context/StoreContext';
-import { handleLogout, isAuthenticated } from '../../utils/auth.js'; // Add isAuthenticated import
-
+import { handleLogout, isAuthenticated } from '../../utils/auth.js';
 
 const Navbar = ({
   setShowLogin,
@@ -17,6 +16,15 @@ const Navbar = ({
   const cartItemCount = getCartItemCount ? getCartItemCount() : 0;
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
+  const handleCartClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      alert('Please login first to access your cart');
+      setInitialState('Login');
+      setShowLogin(true);
+    }
+  };
 
   const handleSearch = async (e) => {
     const query = e.target.value;
@@ -61,12 +69,10 @@ const Navbar = ({
 
   return (
     <nav className='navbar'>
-      {/* Left section - Logo */}
       <Link to='/' className='nav-logo'>
         Readify.
       </Link>
 
-      {/* Middle section - Search */}
       <div className='nav-search'>
         <form onSubmit={handleSearchSubmit} className='search-form'>
           <div className='search-input-container'>
@@ -100,7 +106,6 @@ const Navbar = ({
         </form>
       </div>
 
-      {/* Right section - Cart, Profile, and Logout */}
       <div className='nav-right'>
         {isLoggedIn ? (
           <>
@@ -112,12 +117,8 @@ const Navbar = ({
               </Link>
             </div>
 
-            {/* Profile icon between cart and logout */}
-            <Link 
-                to="/profile" 
-                className="icon-container"
-            >
-                <i className="fa-solid fa-user"></i>
+            <Link to="/profile" className="icon-container">
+              <i className="fa-solid fa-user"></i>
             </Link>
 
             <button onClick={handleSignOut} className='logout-btn'>
@@ -127,7 +128,7 @@ const Navbar = ({
         ) : (
           <>
             <div className='cart-container-logged-out'>
-              <button onClick={handleLogin} className='cart-link'>
+              <button onClick={handleCartClick} className='cart-link'>
                 <i className="fa-solid fa-cart-shopping"></i>
               </button>
             </div>
