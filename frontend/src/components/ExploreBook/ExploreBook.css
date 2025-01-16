@@ -45,6 +45,41 @@
     transition: 0.2s;
 }
 
+/* Wishlist icon styles */
+.wishlist-icon-container {
+    width: 96px;
+    height: 96px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: 0.2s;
+}
+
+.wishlist-icon {
+    font-size: 40px;
+    color: #22801e;
+}
+
+.wishlist-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #22801e;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .explore-book-list-item p{
     margin-top: 10px;
     color: rgb(0, 0, 0);
@@ -62,4 +97,10 @@
 .explore-book-list-item .active{
     border: 4px solid #22801e;
     padding: 2px;
+}
+
+.wishlist-icon-container.active {
+    border: 4px solid #22801e;
+    padding: 2px;
+    background-color: #e8f5e9;
 }
