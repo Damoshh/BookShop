@@ -86,7 +86,7 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
                 {author && <p className="book-item-author">{author}</p>}
                 {category && <p className="book-item-category">{category}</p>}
                 <p className="book-item-desc">{description}</p>
-                <p className="book-item-price">${typeof price === 'number' ? price.toFixed(2) : '0.00'}</p>
+                <p className="book-item-price">RM {typeof price === 'number' ? price.toFixed(2) : '0.00'}</p>
             </div>
         </div>
     );
