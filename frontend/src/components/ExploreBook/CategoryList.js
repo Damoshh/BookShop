@@ -2,10 +2,6 @@ import imgBook1 from '../../assets/imgHeader.jpg'
 
 export const category_list = [
     {
-        category_name: 'Fiction',
-        category_image: imgBook1
-    },
-    {
         category_name: 'Non-Fiction',
         category_image: imgBook1
     },
@@ -31,6 +27,22 @@ export const category_list = [
     },
     {
         category_name: 'Thriller',
+        category_image: imgBook1
+    },
+    {
+        category_name: 'Science Fiction',
+        category_image: imgBook1
+    },
+    {
+        category_name: 'Historical Fiction',
+        category_image: imgBook1
+    },
+    {
+        category_name: 'Self Help',
+        category_image: imgBook1
+    },
+    {
+        category_name: 'Children',
         category_image: imgBook1
     }
 ]
