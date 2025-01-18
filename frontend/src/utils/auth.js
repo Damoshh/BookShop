@@ -4,7 +4,8 @@ export const isAuthenticated = () => {
     try {
         const sessionToken = localStorage.getItem('sessionToken');
         const userEmail = localStorage.getItem('userEmail');
-        return Boolean(sessionToken && userEmail);
+        const userId = localStorage.getItem('userId');
+        return Boolean(sessionToken && userEmail && userId);
     } catch (error) {
         console.error('Auth check error:', error);
         return false;
@@ -21,12 +22,34 @@ export const isAdmin = () => {
     }
 };
 
+export const getCurrentUser = () => {
+    try {
+        return {
+            id: localStorage.getItem('userId'),
+            email: localStorage.getItem('userEmail'),
+            role: localStorage.getItem('userRole')
+        };
+    } catch (error) {
+        console.error('Get user error:', error);
+        return null;
+    }
+};
+
 export const handleLogout = (navigate, setIsLoggedIn, setUserEmail) => {
     try {
+        const userId = localStorage.getItem('userId');
+        
+        // Remove user-specific data
+        if (userId) {
+            localStorage.removeItem(`cart_${userId}`);
+            localStorage.removeItem(`wishlist_${userId}`);
+        }
+        
+        // Remove auth data
         localStorage.removeItem('sessionToken');
         localStorage.removeItem('userEmail');
         localStorage.removeItem('userRole');
-        localStorage.removeItem('cart');
+        localStorage.removeItem('userId');
         
         if (setIsLoggedIn) setIsLoggedIn(false);
         if (setUserEmail) setUserEmail('');
@@ -39,12 +62,16 @@ export const handleLogout = (navigate, setIsLoggedIn, setUserEmail) => {
 
 export const handleLogin = async (email, password) => {
     try {
-        const response = await fetch('http://localhost:8000/api/login', {
+        const response = await fetch('/api/users', {  // Changed from http://localhost:8000/api/login
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ 
+                action: 'login',
+                email, 
+                password 
+            }),
         });
 
         if (!response.ok) {
@@ -53,14 +80,13 @@ export const handleLogin = async (email, password) => {
 
         const data = await response.json();
         
-        // Store the authentication data
         localStorage.setItem('sessionToken', data.token);
         localStorage.setItem('userEmail', email);
+        localStorage.setItem('userId', data.userId);
         if (data.role) {
             localStorage.setItem('userRole', data.role);
         }
 
-        // Dispatch a custom event to notify about login
         window.dispatchEvent(new Event('loginStateChange'));
         
         return true;

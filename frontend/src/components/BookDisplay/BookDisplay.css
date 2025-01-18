@@ -1,16 +1,87 @@
 .book-display {
-    margin-top: 30px;
+    margin: 30px auto;
+    padding: 0 20px;
+    max-width: 1400px;
 }
 
-.book-display h2 {
-    font-size: max(2vw, 24px);
-    font-weight: 600;
-}
-
-.book-display-list {
-    display: grid;  
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-    margin-top: 30px;
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 30px;
     row-gap: 50px;
+    margin-top: 30px;
+}
+
+.book-item {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+}
+
+.book-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.book-info {
+    padding: 20px;
+}
+
+.book-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.book-author {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.book-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 8px;
+}
+
+.book-category {
+    font-size: 0.875rem;
+    color: #666;
+    text-transform: capitalize;
+}
+
+.loading-message,
+.error-message,
+.empty-display {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.25rem;
+    color: #666;
+}
+
+.error-message {
+    color: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .book-item img {
+        height: 250px;
+    }
 }

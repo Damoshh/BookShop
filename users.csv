@@ -1,0 +1,3 @@
+userId,name,email,password,phone,address,role
+user_12345678,John Doe,shra@gmail.com,123,,,user
+user_87654321,adam,adam@gmail.com,123,,,user

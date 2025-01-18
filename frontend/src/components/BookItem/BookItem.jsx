@@ -1,12 +1,25 @@
-// BookItem.jsx
 import React, { useContext } from 'react';
 import './BookItem.css';
 import { StoreContext } from '../../context/StoreContext';
 
-const BookItem = ({ _id, name, price, description, image, author, category, isLoggedIn, setShowLogin, setInitialState }) => {
-    const { cartItems, addToCart, removeFromCart, toggleWishlistItem, isInWishlist } = useContext(StoreContext);
+const BookItem = ({ 
+    _id, 
+    name, 
+    price, 
+    description, 
+    image, 
+    author, 
+    category, 
+    isLoggedIn, 
+    setShowLogin, 
+    setInitialState 
+}) => {
+    const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
 
-    const handleAddToCart = (e) => {
+    // Find cart item quantity
+    const quantity = cartItems?.find(item => item.bookId === _id)?.quantity || 0;
+
+    const handleAddToCart = async (e) => {
         e.stopPropagation();
         if (!isLoggedIn) {
             alert('Please login first to add items to cart');
@@ -14,10 +27,15 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
             setShowLogin(true);
             return;
         }
-        addToCart(_id);
+        try {
+            await addToCart(_id);
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('Failed to add item to cart. Please try again.');
+        }
     };
 
-    const handleRemoveFromCart = (e) => {
+    const handleRemoveFromCart = async (e) => {
         e.stopPropagation();
         if (!isLoggedIn) {
             alert('Please login first to modify cart');
@@ -25,54 +43,36 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
             setShowLogin(true);
             return;
         }
-        removeFromCart(_id);
+        await removeFromCart(_id);
     };
-
-    const handleWishlistToggle = (e) => {
-        e.stopPropagation();
-        if (!isLoggedIn) {
-            alert('Please login first to add items to wishlist');
-            setInitialState('Login');
-            setShowLogin(true);
-            return;
-        }
-        toggleWishlistItem(_id);
-    };
-
-    const fallbackImage = '/placeholder-book.jpg';
 
     return (
         <div className='book-item'>
             <div className='book-item-img-container'>
                 <img 
-                    className='book-item-image' 
-                    src={image || fallbackImage}
-                    alt={name} 
+                    className='book-item-image'
+                    src={image || '/placeholder-book.jpg'}
+                    alt={name}
                     loading="lazy"
                     onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = fallbackImage;
+                        e.target.src = '/placeholder-book.jpg';
                     }}
                 />
                 <div className="book-item-actions">
-                    <i 
-                        className={`fa-${isInWishlist(_id) ? 'solid' : 'regular'} fa-star wishlist-icon`}
-                        onClick={handleWishlistToggle}
-                        title={isLoggedIn ? "Toggle wishlist" : "Login to add to wishlist"}
-                    />
-                    {!cartItems[_id] ? (
+                    {quantity === 0 ? (
                         <i 
                             className="fa-solid fa-circle-plus"
                             onClick={handleAddToCart}
                             title={isLoggedIn ? "Add to cart" : "Login to add to cart"}
                         />
                     ) : (
-                        <div className='book-item-counter'>
+                        <div className="book-item-counter">
                             <i 
                                 className="fa-solid fa-circle-minus"
                                 onClick={handleRemoveFromCart}
                             />
-                            <span>{cartItems[_id]}</span>
+                            <span>{quantity}</span>
                             <i 
                                 className="fa-solid fa-circle-plus"
                                 onClick={handleAddToCart}
@@ -86,7 +86,9 @@ const BookItem = ({ _id, name, price, description, image, author, category, isLo
                 {author && <p className="book-item-author">{author}</p>}
                 {category && <p className="book-item-category">{category}</p>}
                 <p className="book-item-desc">{description}</p>
-                <p className="book-item-price">RM {typeof price === 'number' ? price.toFixed(2) : '0.00'}</p>
+                <p className="book-item-price">
+                    RM {typeof price === 'number' ? price.toFixed(2) : '0.00'}
+                </p>
             </div>
         </div>
     );
