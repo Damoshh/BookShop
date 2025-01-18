@@ -1,28 +1,73 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { StoreContext } from '../../context/StoreContext';
 import BookItem from '../../components/BookItem/BookItem';
 import './Search.css';
 
 const SearchPage = ({ isLoggedIn, setShowLogin }) => {
     const [searchParams] = useSearchParams();
-    const { book_list } = useContext(StoreContext);
-    const [filteredBooks, setFilteredBooks] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     
     useEffect(() => {
-        const query = searchParams.get('q')?.toLowerCase() || '';
-        
-        if (query) {
-            const filtered = book_list.filter(book => 
-                book.title?.toLowerCase().includes(query) ||
-                book.author?.toLowerCase().includes(query) ||
-                book.category?.toLowerCase().includes(query)
-            );
-            setFilteredBooks(filtered);
-        } else {
-            setFilteredBooks(book_list);
+        const fetchSearchResults = async () => {
+            setIsLoading(true);
+            const query = searchParams.get('q');
+            
+            try {
+                const baseUrl = 'http://localhost:8000'; // Verify this is your backend port
+                const url = query 
+                    ? `${baseUrl}/api/books/search?q=${encodeURIComponent(query)}`
+                    : `${baseUrl}/api/books`;
+                
+                console.log('Fetching from URL:', url); // Add this debug log
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setSearchResults(data);
+                } else {
+                    console.error('Server returned an error:', response.status);
+                    setSearchResults([]);
+                }
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                setSearchResults([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+    
+        fetchSearchResults();
+    }, [searchParams]);
+
+    const renderResults = () => {
+        if (isLoading) {
+            return <p className="loading">Loading...</p>;
         }
-    }, [searchParams, book_list]);
+
+        if (searchResults.length === 0) {
+            return <p className="no-results">No books found</p>;
+        }
+
+        return (
+            <div className="book-grid">
+                {searchResults.map(book => (
+                    <BookItem
+                        key={book._id}
+                        _id={book._id}
+                        name={book.title}
+                        description={book.description}
+                        price={book.price}
+                        image={book.coverImg}
+                        author={book.author}
+                        category={book.category}
+                        isLoggedIn={isLoggedIn}
+                        setShowLogin={setShowLogin}
+                    />
+                ))}
+            </div>
+        );
+    };
 
     return (
         <div className="search-page">
@@ -31,28 +76,8 @@ const SearchPage = ({ isLoggedIn, setShowLogin }) => {
                     ? `Search results for "${searchParams.get('q')}"` 
                     : 'All Books'}
             </h2>
-
             <div className="search-results">
-                {filteredBooks.length === 0 ? (
-                    <p className="no-results">No books found</p>
-                ) : (
-                    <div className="book-grid">
-                        {filteredBooks.map(book => (
-                            <BookItem
-                                key={book._id}
-                                _id={book._id}
-                                name={book.title}
-                                description={book.description}
-                                price={book.price}
-                                image={book.coverImg}
-                                author={book.author}
-                                category={book.category}
-                                isLoggedIn={isLoggedIn}
-                                setShowLogin={setShowLogin}
-                            />
-                        ))}
-                    </div>
-                )}
+                {renderResults()}
             </div>
         </div>
     );

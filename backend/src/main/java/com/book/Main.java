@@ -9,6 +9,7 @@ import com.book.handler.AdminHandler;
 import com.book.handler.BookHandler;
 import com.book.handler.CartHandler;
 import com.book.handler.OrderHandler;
+import com.book.handler.SearchBookHandler;
 import com.book.handler.UserHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
@@ -22,6 +23,7 @@ public class Main {
             // Create handlers
             AdminHandler adminHandler = new AdminHandler();
             BookHandler bookHandler = new BookHandler();
+            SearchBookHandler searchBookHandler = new SearchBookHandler();  // Add this line
             CartHandler cartHandler = new CartHandler();
             UserHandler userHandler = new UserHandler();
 
@@ -33,6 +35,16 @@ public class Main {
                     return;
                 }
                 bookHandler.handle(exchange);
+            });
+
+            // Search endpoint
+            server.createContext("/api/books/search", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                searchBookHandler.handle(exchange);
             });
 
             // User endpoints
@@ -108,6 +120,15 @@ public class Main {
                     return;
                 }
                 new OrderHandler(adminHandler).handle(exchange);
+            });
+
+            server.createContext("/api/books/category/", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                bookHandler.handle(exchange);
             });
 
             // Start the server
