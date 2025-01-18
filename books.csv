@@ -1,19 +1,21 @@
 id,name,author,category,description,price,image
-1,The Garden of Evening Mists,Tan Twan Eng,35.50,Historical Fiction,A poignant story of love memory and war in the Cameron Highlands,/images/garden_of_evening_mists.jpeg
-2,To Kill a Mockingbird,Harper Lee,24.99,Historical Fiction,A classic novel exploring racial injustice in the Deep South,/images/to_kill_a_mockingbird.jpeg
-3,A Doctor in the House,Mahathir Mohamad,45.00,Non-Fiction,The memoirs of Malaysia’s longest-serving Prime Minister,/images/doctor_in_the_house.jpg
-4,Sapiens: A Brief History of Humankind,Yuval Noah Harari,29.99,Non-Fiction,A fascinating journey through the history of humanity,/images/sapiens.jpg
-5,Malaysian Tales: Retold and Remixed,Edited by Daphne Lee,22.50,Romance,A collection of tales and folklores set in Malaysia,/images/malaysian_tales.jpg
-6,Pride and Prejudice,Jane Austen,19.99,Romance,A timeless tale of love and societal expectations,/images/pride_and_prejudice.jpg
-7,Operation Nasi Kerabu,Zaharan Razak,33.00,Action,A gripping account of the Patani Islamic insurgency,/images/operation_nasi_kerabu.jpg
-8,The Bourne Identity,Robert Ludlum,26.99,Action,An exhilarating spy thriller that introduced Jason Bourne,/images/the_bourne_identity.jpeg
-9,Inspector Singh Investigates: A Most Peculiar Malaysian Murder,Shamini Flint,21.99,Mystery,A murder mystery set in Malaysia featuring Inspector Singh,/images/inspector_singh.jpg
-10,Gone Girl,Gillian Flynn,27.99,Mystery,A thrilling tale of love deception and revenge,/images/gone_girl.jpg
-11,The Weight of Our Sky,Hanna Alkaf,30.00,Fantasy,A young girl battles her inner demons amidst the 1969 racial riots in Malaysia,/images/weight_of_our_sky.jpeg
-12,Harry Potter and the Sorcerer’s Stone,J.K. Rowling,29.99,Fantasy,The first book in the beloved Harry Potter series,/images/harry_potter.jpg
-13,Ghost Stories of Malaysia,Andrew Lee,18.99,Horror,A spine-chilling collection of supernatural tales from Malaysia,/images/ghost_stories_malaysia.jpg
-14,It,Stephen King,35.99,Horror,A terrifying story of a malevolent force in a small town,/images/it.jpg
-15,KL Noir: Red,Edited by Amir Muhammad,25.00,Thriller,A gritty collection of crime stories set in Kuala Lumpur,/images/kl_noir_red.jpg
-16,The Girl on the Train,Paula Hawkins,28.99,Thriller,A psychological thriller about an unreliable witness to a crime,/images/the_girl_on_the_train.jpg
-17,Dune,Frank Herbert,34.99,Science Fiction,An epic tale of politics religion and ecology on the desert planet of Arrakis,/images/dune.jpg
-18,The War of the Worlds,H.G. Wells,22.99,Science Fiction,A classic story of alien invasion and survival,/images/waroftheworlds.jpg
+1,The Garden of Evening Mists,Tan Twan Eng,Historical Fiction,A poignant story of love memory and war in the Cameron Highlands,35.50,/images/garden_of_evening_mists.jpeg
+2,To Kill a Mockingbird,Harper Lee,Historical Fiction,A classic novel exploring racial injustice in the Deep South,24.99,/images/to_kill_a_mockingbird.jpeg
+3,A Doctor in the House,Mahathir Mohamad,Non-Fiction,The memoirs of Malaysia’s longest-serving Prime Minister,45.00,/images/doctor_in_the_house.jpg
+4,Sapiens: A Brief History of Humankind,Yuval Noah Harari,Non-Fiction,A fascinating journey through the history of humanity,29.99,/images/sapiens.jpg
+5,Malaysian Tales: Retold and Remixed,Edited by Daphne Lee,Romance,A collection of tales and folklores set in Malaysia,22.50,/images/malaysian_tales.jpg
+6,Pride and Prejudice,Jane Austen,Romance,A timeless tale of love and societal expectations,19.99,/images/pride_and_prejudice.jpg
+7,Operation Nasi Kerabu,Zaharan Razak,Action,A gripping account of the Patani Islamic insurgency,33.00,/images/operation_nasi_kerabu.jpg
+8,The Bourne Identity,Robert Ludlum,Action,An exhilarating spy thriller that introduced Jason Bourne,26.99,/images/the_bourne_identity.jpeg
+9,Inspector Singh Investigates: A Most Peculiar Malaysian Murder,Shamini Flint,Mystery,A murder mystery set in Malaysia featuring Inspector Singh,21.99,/images/inspector_singh.jpg
+10,Gone Girl,Gillian Flynn,Mystery,A thrilling tale of love deception and revenge,27.99,/images/gone_girl.jpg
+11,The Weight of Our Sky,Hanna Alkaf,Fantasy,A young girl battles her inner demons amidst the 1969 racial riots in Malaysia,30.00,/images/weight_of_our_sky.jpeg
+12,Harry Potter and the Sorcerer’s Stone,J.K. Rowling,Fantasy,The first book in the beloved Harry Potter series,29.99,/images/harry_potter.jpg
+13,Ghost Stories of Malaysia,Andrew Lee,Horror,A spine-chilling collection of supernatural tales from Malaysia,18.99,/images/ghost_stories_malaysia.jpg
+14,It,Stephen King,Horror,A terrifying story of a malevolent force in a small town,35.99,/images/it.jpg
+15,KL Noir: Red,Edited by Amir Muhammad,Thriller,A gritty collection of crime stories set in Kuala Lumpur,25.00,/images/kl_noir_red.jpg
+16,The Girl on the Train,Paula Hawkins,Thriller,A psychological thriller about an unreliable witness to a crime,28.99,/images/the_girl_on_the_train.jpg
+17,Dune,Frank Herbert,Science Fiction,An epic tale of politics religion and ecology on the desert planet of Arrakis,34.99,/images/dune.jpg
+18,The War of the Worlds,H.G. Wells,Science Fiction,A classic story of alien invasion and survival,22.99,/images/waroftheworlds.jpg
+19,The Lorax,Dr. Seuss,Children,A beloved children’s story advocating for environmental conservation,15.99,/images/the-lorax-5.jpg
+20,Charlotte’s Web,E.B. White,Children,The heartwarming tale of friendship between a pig and a spider,14.99,/images/charlotteweb.jpg
