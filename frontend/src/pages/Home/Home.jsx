@@ -10,12 +10,15 @@ const Home = ({ isLoggedIn, setShowLogin }) => {
   return (
     <div className='home'>
       <Header />
-      <ExploreBook category={category} setCategory={setCategory} />
-      <BookDisplay 
-        category={category} 
-        isLoggedIn={isLoggedIn} 
-        setShowLogin={setShowLogin}
-      />
+      
+      <div className='main-content'>
+        <ExploreBook category={category} setCategory={setCategory} />
+        <BookDisplay 
+          category={category} 
+          isLoggedIn={isLoggedIn} 
+          setShowLogin={setShowLogin}
+        />
+      </div>
     </div>
   )
 }

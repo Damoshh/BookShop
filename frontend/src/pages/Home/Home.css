@@ -1,13 +1,30 @@
 .home {
     max-width: 1440px;
     margin: 0 auto;
+    background-color: #ffffff;
+}
+
+
+
+.main-content {
     padding: 20px;
-    background-color: #f8f9fa;
 }
 
 /* Add responsive padding */
 @media (max-width: 768px) {
-    .home {
+    .hero-section {
+        height: 400px;
+    }
+
+    .hero-content {
+        padding: 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+    }
+
+    .main-content {
         padding: 10px;
     }
 }
