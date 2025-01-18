@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { StoreContext } from '../../context/StoreContext';
-import { handleLogout, isAuthenticated } from '../../utils/auth.js';
+import { handleLogout } from '../../utils/auth.js';
 
 const Navbar = ({
   setShowLogin,
@@ -12,8 +12,7 @@ const Navbar = ({
   setInitialState
 }) => {
   const navigate = useNavigate();
-  const { getCartItemCount } = useContext(StoreContext);
-  const cartItemCount = getCartItemCount ? getCartItemCount() : 0;
+  const { cartTotalItems, cartTotal } = useContext(StoreContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -112,8 +111,8 @@ const Navbar = ({
             <div className='cart-container-logged-in'>
               <Link to='/cart' className='cart-link'>
                 <i className="fa-solid fa-cart-shopping"></i>
-                <span>RM {cartItemCount > 0 ? (cartItemCount * 2).toFixed(2) : '0.00'}</span>
-                {cartItemCount > 0 && <div className='cart-badge'>{cartItemCount}</div>}
+                <span>RM {cartTotal ? cartTotal.toFixed(2) : '0.00'}</span>
+                {cartTotalItems > 0 && <div className='cart-badge'>{cartTotalItems}</div>}
               </Link>
             </div>
 

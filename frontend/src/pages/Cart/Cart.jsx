@@ -5,7 +5,14 @@ import { StoreContext } from '../../context/StoreContext';
 import { isAuthenticated } from '../../utils/auth';
 
 const Cart = () => {
-  const { cartItems, book_list, removeFromCart } = useContext(StoreContext);
+  const { 
+    cartItems, 
+    cartSubtotal, 
+    cartDeliveryFee, 
+    cartTotal,
+    removeFromCart 
+  } = useContext(StoreContext);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,20 +22,11 @@ const Cart = () => {
     }
   }, [navigate]);
 
-  const calculateTotal = () => {
-    return book_list.reduce((total, item) => {
-      if (cartItems[item._id]) {
-        return total + (item.price * cartItems[item._id]);
-      }
-      return total;
-    }, 0);
-  };
-
   if (!isAuthenticated()) {
     return null;
   }
 
-  const hasItems = Object.keys(cartItems).length > 0;
+  const hasItems = cartItems.length > 0;
 
   return (
     <div className="cart">
@@ -50,46 +48,41 @@ const Cart = () => {
             </div>
             <br />
             <hr />
-            {book_list.map((item) => {
-              if (cartItems[item._id] > 0) {
-                return (
-                  <div key={item._id}>
-                    <div className="cart-items-title cart-items-item">
-                      <img src={item.image} alt={item.name} />
-                      <p>{item.name}</p>
-                      <p>${item.price.toFixed(2)}</p>
-                      <div>{cartItems[item._id]}</div>
-                      <p>${(item.price * cartItems[item._id]).toFixed(2)}</p>
-                      <p
-                        className="cart-items-remove-icon"
-                        onClick={() => removeFromCart(item._id)}
-                      >
-                        x
-                      </p>
-                    </div>
-                    <hr />
-                  </div>
-                );
-              }
-              return null;
-            })}
+            {cartItems.map((item) => (
+              <div key={item.bookId}>
+                <div className="cart-items-title cart-items-item">
+                  <img src={item.image} alt={item.name} />
+                  <p>{item.name}</p>
+                  <p>RM {item.price.toFixed(2)}</p>
+                  <div>{item.quantity}</div>
+                  <p>RM {(item.price * item.quantity).toFixed(2)}</p>
+                  <p
+                    className="cart-items-remove-icon"
+                    onClick={() => removeFromCart(item.bookId)}
+                  >
+                    x
+                  </p>
+                </div>
+                <hr />
+              </div>
+            ))}
           </div>
           <div className="cart-total">
             <h2>Cart Totals</h2>
             <div>
               <div className="cart-total-details">
                 <p>Subtotal</p>
-                <p>${calculateTotal().toFixed(2)}</p>
+                <p>RM {cartSubtotal.toFixed(2)}</p>
               </div>
               <hr />
               <div className="cart-total-details">
                 <p>Delivery Fee</p>
-                <p>${calculateTotal() === 0 ? '0.00' : '5.00'}</p>
+                <p>RM {cartDeliveryFee.toFixed(2)}</p>
               </div>
               <hr />
               <div className="cart-total-details">
                 <b>Total</b>
-                <b>${calculateTotal() === 0 ? '0.00' : (calculateTotal() + 5).toFixed(2)}</b>
+                <b>RM {cartTotal.toFixed(2)}</b>
               </div>
             </div>
             <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>

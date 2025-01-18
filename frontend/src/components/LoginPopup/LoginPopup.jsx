@@ -13,15 +13,14 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (isSubmitting) return;
 
     try {
         setIsSubmitting(true);
 
         if (isAdminLogin) {
-            // Handle admin login
-            const response = await fetch('http://localhost:8000/api/admin/login', {
+            // Handle admin login using proxy
+            const response = await fetch('/api/admin/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,13 +45,13 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
             setUserEmail(formData.email);
             navigate('/admin');
         } else {
-            // Handle regular user login/signup
+            // Handle regular user login/signup using proxy
             const payload = {
                 action: initialState === 'Sign Up' ? 'register' : 'login',
                 ...formData
             };
 
-            const response = await fetch('http://localhost:8000/api/users', {
+            const response = await fetch('/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,13 +66,12 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
 
             const data = await response.json();
             
-            // Generate a simple token if one is not provided
-            const token = data.token || Math.random().toString(36).substring(7);
-            
-            // Store authentication data
-            localStorage.setItem('sessionToken', token);
+            localStorage.setItem('sessionToken', data.token);
             localStorage.setItem('userEmail', formData.email);
             localStorage.setItem('userRole', data.role || 'user');
+            localStorage.setItem('userId', data.userId);
+
+            window.dispatchEvent(new Event('loginStateChange'));
 
             setIsLoggedIn(true);
             setUserEmail(formData.email);
