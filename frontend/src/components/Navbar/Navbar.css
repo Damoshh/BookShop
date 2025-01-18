@@ -1,137 +1,318 @@
+/* Ensure the navbar layout is fixed */
 .navbar {
-  padding: 20px 0px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 80px;
+  width: 100%;
 }
 
-.nav-title {
-  font-size: 3rem;
-  color: #22801e;
-  font-weight: 700;
-}
-
-.nav-menu {
+/* Search section - Keep search bar fixed */
+.nav-search {
   display: flex;
-  list-style: none;
-  gap: 1rem;
-  font-size: 1rem;
-  color: black;
+  align-items: center;
+  flex-grow: 1; /* Allows search bar to take available space */
+  max-width: 600px;  /* Set a maximum width for search bar */
+  margin: 0 2rem;
+  position: relative;
 }
 
+.search-input-container:focus-within {
+  background: #f5f5f5;
+}
+
+.search-form {
+  width: 100%;
+  position: relative;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  background: #860000;  /* Lighter background */
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;  /* Adjust padding */
+  width: 100%;
+}
+
+.search-input-container:focus-within {
+  background: #f5f5f5;
+}
+
+.search-icon {
+  color: #999;  /* Lighter icon color */
+  font-size: 1rem;
+  margin-right: 1rem;  /* Increased spacing */
+}
+
+.search-input-home {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  height: 24px;
+  line-height: 24px;
+}
+
+/* Cart and Auth section */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-end;
+  width: 350px; /* Fixed width */
 }
 
-.nav-right i {
-  font-size: 1.3rem;
-  margin-right: 2rem;
-}
-
-.nav-right i:hover {
-  color: #22801e;
-}
-
-/* New styles for auth buttons */
-.auth-buttons {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.login-btn {
-  background: transparent;
-  color: #000;
-  border: 1px solid #e0e0e0;
-  padding: 8px 24px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.login-btn:hover {
-  background-color: #f5f5f5;
-}
-
-.signup-btn {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 8px 24px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.signup-btn:hover {
-  background-color: #333;
-}
-
-.logout-btn {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 8px 24px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #333;
-}
-
-.cart-icon {
+/* Cart section */
+.cart-container {
   position: relative;
+  min-width: 110px; /* Accommodate both cart icon + RM text */
 }
 
-.dot {
+.cart-link {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  text-decoration: none;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  padding: 0.4rem 1rem;
+  height: 2.5rem;
+  justify-content: center;
+  border: none;
+  white-space: nowrap; /* Prevent text wrapping */
+  min-width: 44px; /* Minimum width to match container */
+}
+
+.cart-link i {
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.cart-badge {
   position: absolute;
   top: -8px;
-  right: 11px;
-  background-color: green;
+  right: -8px;
   color: white;
+  background-color: #ff4444;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
+}
+
+/* Ensure the rest of the navbar content stays in place */
+.logout-btn {
+  margin-left: 1rem; /* Ensure icons and logout button have consistent spacing */
+}
+
+/* Logo */
+.nav-logo {
+  font-size: 1.5rem;
   font-weight: bold;
-  animation: fadeIn 0.3s ease-in;
+  color: #333;
+  text-decoration: none;
+  flex-shrink: 0; /* Prevent logo from shrinking */
 }
 
-.auth-section {
+/* Search section */
+.nav-search {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-grow: 1; /* Allow search to take available space */
+  max-width: 600px; /* Ensure it doesn't grow too large */
+  margin: 0 2rem;
+  position: relative;
 }
 
-.user-profile {
+.search-form {
+  width: 100%;
+  position: relative;
+}
+
+.search-input-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 4px 12px;
-  background-color: #f5f5f5;
-  border-radius: 20px;
+  background: #dedcdc;  /* Lighter background */
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;  /* Increased padding */
+  transition: background-color 0.2s;
+  width: 100%;
 }
 
-.user-profile i {
-  color: #22801e;
+.search-input-container:focus-within {
+  background: #f5f5f5;
+}
+
+.search-icon {
+  color: #999;  /* Lighter icon color */
   font-size: 1rem;
-  margin-right: 0;
+  margin-right: 1rem;  /* Increased spacing */
 }
 
-.user-email {
-  font-size: 0.9rem;
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.search-input-home {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  height: 24px;  /* Specific height */
+  line-height: 24px;  /* Match height for centering */
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Add space between cart and icon */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; /* Fixed width to match cart container */
+}
+
+.icon-container i {
+  font-size: 1.3rem; /* Icon size */
+  color: #333; /* Icon color */
+  margin-left: 1rem;
+}
+
+/* Cart section */
+.cart-container {
+  position: relative;
+}
+
+.cart-container-logged-in {
+  position: relative;
+  min-width: 110px; /* Space for cart icon + RM text */
+}
+
+/* Logged-out cart styles */
+.cart-container-logged-out {
+  position: relative;
+  min-width: 44px; /* Space for just the cart icon */
+}
+
+.cart-link {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  text-decoration: none;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  padding: 0.4rem 1rem;
+  height: 2.5rem;
+  justify-content: center;
+  border: none;
   white-space: nowrap;
+}
+
+.cart-link i {
+  font-size: 1.3rem; /* Size of the cart icon */
+  color: #333; /* Icon color */
+}
+
+.cart-link span {
+  color: #333; /* Text color for the RM price */
+  font-size: 1rem; /* Font size of the RM text */
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: white;
+  background-color: #ff4444; /* Red background for the badge */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px; /* Font size of the badge */
+}
+
+
+/* Auth buttons */
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 230px; /* Match width of logged-in state elements */
+}
+
+.login-btn, .signup-btn, .logout-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px; /* Ensure consistent button width */
+  white-space: nowrap;
+}
+
+.login-btn {
+  background: transparent;
+  border: 2px solid #333;
+}
+
+.signup-btn {
+  background: #333;
+  color: white;
+}
+
+.logout-btn {
+  background: #ff4444;
+  color: white;
+}
+
+.login-btn:hover, .signup-btn:hover, .logout-btn:hover {
+  transform: translateY(-2px);
+}
+
+.login-btn:hover {
+  background: #f5f5f5;
+}
+
+.signup-btn:hover {
+  background: #222;
+}
+
+.logout-btn:hover {
+  background: #ff3333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .nav-search {
+    margin: 0 1rem;
+  }
+
+  .cart-link span {
+    display: none;
+  }
+
+  .auth-buttons {
+    gap: 0.5rem;
+  }
+
+  .login-btn, .signup-btn, .logout-btn {
+    padding: 0.5rem 1rem;
+  }
 }

@@ -2,39 +2,34 @@ package com.book.model;
 
 public class Book {
     private String _id;
-    private String name;
-    private String description;
+    private String title;  // Changed from name to match CSV
+    private String author;
     private double price;
     private String category;
-    private String image;
-    private String author;
-    private double rating;
-    private boolean inStock;
+    private String description;
+    private String coverImg;  // Changed from image to match CSV
 
     // Constructor
-    public Book(String _id, String name, String description, double price, 
-                String category, String image, String author, double rating, 
-                boolean inStock) {
+    public Book(String _id, String title, String author, double price, 
+                String category, String description, String coverImg) {
         this._id = _id;
-        this.name = name;
-        this.description = description;
+        this.title = title;
+        this.author = author;
         this.price = price;
         this.category = category;
-        this.image = image;
-        this.author = author;
-        this.rating = rating;
-        this.inStock = inStock;
+        this.description = description;
+        this.coverImg = coverImg;
     }
 
     // Getters and Setters
     public String get_id() { return _id; }
     public void set_id(String _id) { this._id = _id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
@@ -42,15 +37,13 @@ public class Book {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
 
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public String getCoverImg() { return coverImg; }
+    public void setCoverImg(String coverImg) { this.coverImg = coverImg; }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
-
-    public boolean isInStock() { return inStock; }
-    public void setInStock(boolean inStock) { this.inStock = inStock; }
+    // For compatibility with frontend expecting 'name' and 'image'
+    public String getName() { return title; }
+    public String getImage() { return coverImg; }
 }

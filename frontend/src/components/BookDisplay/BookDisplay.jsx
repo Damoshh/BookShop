@@ -1,36 +1,107 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import './BookDisplay.css';
-import { StoreContext } from '../../context/StoreContext';
 import BookItem from '../BookItem/BookItem';
 
-const BookDisplay = ({ category }) => {
-    const { book_list, getBooksByCategory } = useContext(StoreContext);
-    
-    const displayedBooks = category ? getBooksByCategory(category) : book_list;
+const BookDisplay = ({ category, isLoggedIn, setShowLogin, setInitialState }) => {
+    const [displayedBooks, setDisplayedBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Debug log to check data
-    console.log('Books to display:', displayedBooks);
+    useEffect(() => {
+        const fetchBooksByCategory = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                
+                const url = category && category !== 'All' 
+                    ? `/api/books/category/${encodeURIComponent(category)}`
+                    : `/api/books`;
+        
+                console.log('Fetching books from:', url);
+        
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                // Debug logs
+                console.log('Raw response data:', data);
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('Invalid data format received from server');
+                }
+        
+                const validatedBooks = data.map(book => {
+                    console.log('Processing book:', book);  // Debug log for each book
+                    return {
+                        _id: book._id,
+                        title: book.title || book.name,  // Try both title and name
+                        author: book.author || 'Unknown Author',
+                        category: book.category || 'Uncategorized',
+                        description: book.description || '',
+                        price: typeof book.price === 'number' ? book.price : 0,
+                        image: book.image || book.coverImg || '/placeholder-book.jpg'
+                    };
+                });
+        
+                console.log('Validated books:', validatedBooks);
+                setDisplayedBooks(validatedBooks);
+                
+            } catch (error) {
+                console.error('Error fetching books:', error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchBooksByCategory();
+    }, [category]);
+
+    if (loading) {
+        return (
+            <div className="book-display">
+                <div className="loading-message">Loading books...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="book-display">
+                <div className="error-message">
+                    Error loading books: {error}. Please try refreshing the page.
+                </div>
+            </div>
+        );
+    }
+
+    if (!displayedBooks || displayedBooks.length === 0) {
+        return (
+            <div className="book-display">
+                <div className="empty-display">
+                    No books available in {category === 'All' ? 'any category' : `the ${category} category`}
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className='book-display' id='book-display'>
-            <h2>Top Book Seller</h2>
-            <div className="book-display-list">
-                {displayedBooks && displayedBooks.length > 0 ? (
-                    displayedBooks.map((book) => (
-                        <BookItem 
-                            key={book._id}
-                            _id={book._id}  
-                            name={book.title || book.name} // Handle both title and name
-                            description={book.description}
-                            price={parseFloat(book.price)}
-                            image={book.coverImg || book.image} // Handle both coverImg and image
-                            author={book.author}
-                            category={book.category}
-                        />
-                    ))
-                ) : (
-                    <div>No books available</div>
-                )}
+        <div className="book-display">
+            <div className="book-grid">
+                {displayedBooks.map((book) => (
+                    <BookItem
+                        key={book._id}
+                        _id={book._id}
+                        title={book.title}
+                        author={book.author}
+                        category={book.category}
+                        description={book.description}
+                        price={book.price}
+                        image={book.image}
+                        isLoggedIn={isLoggedIn}
+                        setShowLogin={setShowLogin}
+                        setInitialState={setInitialState}
+                    />
+                ))}
             </div>
         </div>
     );

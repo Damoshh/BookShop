@@ -1,0 +1,61 @@
+.home {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: #ffffff;
+}
+
+.books-section {
+    padding: 40px 0;
+    scroll-margin-top: 0px;
+}
+
+.explore-heading {
+    padding: 40px 0;
+}
+
+.explore-heading h1 {
+    font-size: 2.5rem;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.explore-heading p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+.categories-section {
+    padding: 20px 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+    .home {
+        padding: 0 15px;
+    }
+
+    .header {
+        height: 400px;
+        margin: 15px 15px;
+    }
+    
+    .books-section,
+    .explore-heading {
+        padding: 40px 0;
+    }
+    
+    .explore-heading h1 {
+        font-size: 2rem;
+    }
+    
+    .categories-section {
+        padding: 15px 0;
+    }
+}

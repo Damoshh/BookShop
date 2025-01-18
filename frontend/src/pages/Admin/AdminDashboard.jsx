@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import AdminLayout from "./AdminLayout";
 import ManageBooks from "./ManageBook";
 import Orders from "./Order";
+import AdminProfile from './AdminProfile'; 
 
 const AdminDashboard = () => {
   return (
@@ -11,6 +12,7 @@ const AdminDashboard = () => {
         <Route path="/" element={<AdminOverview />} />
         <Route path="/books" element={<ManageBooks />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/profile" element={<AdminProfile />} />
       </Routes>
     </AdminLayout>
   );

@@ -1,4 +1,4 @@
-_id,title,author,price,category,description,coverImg
+id,name,author,category,description,price,image
 1,The Garden of Evening Mists,Tan Twan Eng,35.50,Historical Fiction,A poignant story of love memory and war in the Cameron Highlands,/images/garden_of_evening_mists.jpeg
 2,To Kill a Mockingbird,Harper Lee,24.99,Historical Fiction,A classic novel exploring racial injustice in the Deep South,/images/to_kill_a_mockingbird.jpeg
 3,A Doctor in the House,Mahathir Mohamad,45.00,Non-Fiction,The memoirs of Malaysia’s longest-serving Prime Minister,/images/doctor_in_the_house.jpg
