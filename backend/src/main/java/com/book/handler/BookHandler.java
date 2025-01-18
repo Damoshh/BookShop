@@ -36,7 +36,7 @@ public class BookHandler implements HttpHandler {
             for (Map<String, String> book : books) {
                 JSONObject jsonBook = new JSONObject();
                 jsonBook.put("_id", book.get("id"));
-                jsonBook.put("name", book.get("name")); // Using name from CSV
+                jsonBook.put("title", book.get("title")); // Using name from CSV
                 jsonBook.put("author", book.get("author"));
                 jsonBook.put("category", book.get("category"));
                 jsonBook.put("description", book.get("description"));
