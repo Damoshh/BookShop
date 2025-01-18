@@ -1,20 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => {
-  const navigate = useNavigate();
-
-  const handleViewMenu = () => {
-    navigate('/search');
-  };
-
+const Header = ({ onBrowseBooks }) => {
   return (
     <div className='header'>
       <div className="header-content">
         <h2>Discover Your Next Read</h2>
         <p>Explore our vast collection of books across various genres. Find your perfect read today!</p>
-        <button onClick={handleViewMenu}>Browse Books</button>
+        <button onClick={onBrowseBooks}>Browse Books</button>
+      </div>
+      <div className="scroll-indicator" onClick={onBrowseBooks}>
+        <i className="fa-solid fa-chevron-down"></i>
       </div>
     </div>
   );

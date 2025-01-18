@@ -16,36 +16,20 @@ const Profile = ({ userEmail }) => {
 
     const fetchUserData = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/users/profile', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:8000/api/users/profile?email=${userEmail}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: userEmail })
+                }
             });
             if (response.ok) {
                 const data = await response.json();
                 setUserData(data);
+            } else {
+                console.error('Failed to fetch user data');
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
-        }
-    };
-
-    const handleUpdateProfile = async () => {
-        try {
-            const response = await fetch('http://localhost:8000/api/users/update', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData)
-            });
-            if (response.ok) {
-                alert('Profile updated successfully!');
-            }
-        } catch (error) {
-            console.error('Error updating profile:', error);
         }
     };
 
@@ -72,38 +56,22 @@ const Profile = ({ userEmail }) => {
                         <h2>Profile Details</h2>
                         <div className="form-group">
                             <label>Full Name</label>
-                            <input
-                                type="text"
-                                value={userData.name}
-                                onChange={(e) => setUserData({...userData, name: e.target.value})}
-                            />
+                            <div className="readonly-field">{userData.name || 'Not provided'}</div>
                         </div>
                         <div className="form-group">
                             <label>Email</label>
-                            <input
-                                type="email"
-                                value={userData.email}
-                                disabled
-                            />
+                            <div className="readonly-field">{userData.email}</div>
                         </div>
                         <div className="form-group">
                             <label>Phone Number</label>
-                            <input
-                                type="tel"
-                                value={userData.phone}
-                                onChange={(e) => setUserData({...userData, phone: e.target.value})}
-                            />
+                            <div className="readonly-field">{userData.phone || 'Not provided'}</div>
                         </div>
                         <div className="form-group">
                             <label>Address</label>
-                            <textarea
-                                value={userData.address}
-                                onChange={(e) => setUserData({...userData, address: e.target.value})}
-                            />
+                            <div className="readonly-field address-field">
+                                {userData.address || 'Not provided'}
+                            </div>
                         </div>
-                        <button className="update-btn" onClick={handleUpdateProfile}>
-                            Update Profile
-                        </button>
                     </div>
                 )}
 

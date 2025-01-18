@@ -7,18 +7,21 @@ import BookDisplay from '../../components/BookDisplay/BookDisplay'
 const Home = ({ isLoggedIn, setShowLogin }) => {
   const [category, setCategory] = useState('All');
 
+  const handleBrowseBooks = () => {
+    document.getElementById('books-section').scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className='home'>
-      <Header />
-      
-      <div className='main-content'>
+      <Header onBrowseBooks={handleBrowseBooks} />
+      <section id='books-section' className='books-section'>
         <ExploreBook category={category} setCategory={setCategory} />
         <BookDisplay 
           category={category} 
           isLoggedIn={isLoggedIn} 
           setShowLogin={setShowLogin}
         />
-      </div>
+      </section>
     </div>
   )
 }
