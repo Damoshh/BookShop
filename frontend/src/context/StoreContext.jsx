@@ -7,6 +7,8 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState([]);
     const [cartTotal, setCartTotal] = useState(0);
     const [cartTotalItems, setCartTotalItems] = useState(0);
+    const [cartSubtotal, setCartSubtotal] = useState(0);
+    const [deliveryFee, setDeliveryFee] = useState(0);
 
     // Save cart state with user ID
     const saveCartState = () => {
@@ -55,9 +57,11 @@ const StoreContextProvider = (props) => {
 
                 // Use local cart if it's newer than backend data
                 if (savedCart && savedCart.items && savedCart.items.length > 0) {
-                    setCartItems(savedCart.items);
-                    setCartTotal(savedCart.total);
-                    setCartTotalItems(savedCart.totalItems);
+                    setCartItems(backendCart.items || []);
+                    setCartSubtotal(backendCart.subtotal || 0);
+                    setDeliveryFee(backendCart.deliveryFee || 0);
+                    setCartTotal(backendCart.total || 0);
+                    setCartTotalItems(backendCart.totalItems || 0);
 
                     // Sync local cart to backend
                     try {
@@ -140,6 +144,8 @@ const StoreContextProvider = (props) => {
             if (response.ok) {
                 const updatedCart = await response.json();
                 setCartItems(updatedCart.items || []);
+                setCartSubtotal(updatedCart.subtotal || 0);
+                setDeliveryFee(updatedCart.deliveryFee || 0);
                 setCartTotal(updatedCart.total || 0);
                 setCartTotalItems(updatedCart.totalItems || 0);
             }
@@ -164,6 +170,8 @@ const StoreContextProvider = (props) => {
             if (response.ok) {
                 const updatedCart = await response.json();
                 setCartItems(updatedCart.items || []);
+                setCartSubtotal(updatedCart.subtotal || 0);
+                setDeliveryFee(updatedCart.deliveryFee || 0);
                 setCartTotal(updatedCart.total || 0);
                 setCartTotalItems(updatedCart.totalItems || 0);
             }
@@ -192,12 +200,16 @@ const StoreContextProvider = (props) => {
         }
         
         setCartItems([]);
+        setCartSubtotal(0);
+        setDeliveryFee(0);
         setCartTotal(0);
         setCartTotalItems(0);
     };
 
     const value = {
         cartItems,
+        cartSubtotal,
+        deliveryFee,
         cartTotal,
         cartTotalItems,
         addToCart,

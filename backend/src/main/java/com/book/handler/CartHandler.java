@@ -39,7 +39,7 @@ public class CartHandler implements HttpHandler {
     }
 
     @Override
-public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) throws IOException {
     String response = "";
     int statusCode = 200;
 
@@ -76,6 +76,8 @@ public void handle(HttpExchange exchange) throws IOException {
             }
             
             jsonResponse.put("items", itemsArray);
+            jsonResponse.put("subtotal", cart.getTotalAmount());
+            jsonResponse.put("deliveryFee", cart.getDeliveryFee());
             jsonResponse.put("total", cart.getGrandTotal());
             jsonResponse.put("totalItems", cart.getTotalItems());
             response = jsonResponse.toString();
@@ -143,18 +145,23 @@ public void handle(HttpExchange exchange) throws IOException {
         List<CartItem> items = readCartItems().stream()
             .filter(item -> item.getUserId().equals(userId))
             .collect(Collectors.toList());
-
+    
+        // If no items, return empty cart with no delivery fee
+        if (items.isEmpty()) {
+            return new CartResponse(items, 0, 0, 0, 0);
+        }
+    
         int totalItems = items.stream()
             .mapToInt(CartItem::getQuantity)
             .sum();
-
+    
         double totalAmount = items.stream()
             .mapToDouble(item -> item.getPrice() * item.getQuantity())
             .sum();
-
+    
         double deliveryFee = calculateDeliveryFee(totalAmount);
         double grandTotal = totalAmount + deliveryFee;
-
+    
         return new CartResponse(items, totalItems, totalAmount, deliveryFee, grandTotal);
     }
 
@@ -188,7 +195,7 @@ public void handle(HttpExchange exchange) throws IOException {
         Optional<CartItem> existingItem = items.stream()
             .filter(item -> item.getUserId().equals(userId) && item.getBookId().equals(bookId))
             .findFirst();
-
+    
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             if (item.getQuantity() > 1) {
@@ -197,12 +204,27 @@ public void handle(HttpExchange exchange) throws IOException {
                 items.remove(item);
             }
             writeCartItems(items);
+            
+            // After removing, check if this was the last item
+            List<CartItem> remainingUserItems = items.stream()
+                .filter(i -> i.getUserId().equals(userId))
+                .collect(Collectors.toList());
+                
+            if (remainingUserItems.isEmpty()) {
+                return new CartResponse(new ArrayList<>(), 0, 0, 0, 0);
+            }
         }
-
+    
         return getCartItems(userId);
     }
 
     private double calculateDeliveryFee(double totalAmount) {
+        // Return 0 if cart is empty (totalAmount is 0)
+        if (totalAmount == 0) {
+            return 0.0;
+        }
+        
+        // Existing delivery fee logic
         if (totalAmount >= 100) {
             return 0.0; // Free delivery for orders over RM100
         } else if (totalAmount >= 50) {
