@@ -1,14 +1,23 @@
 package com.book.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 public class SearchBookHandler implements HttpHandler {
     private static final String BOOKS_CSV_PATH = "books.csv";
@@ -45,13 +54,19 @@ public class SearchBookHandler implements HttpHandler {
             JSONArray jsonArray = new JSONArray();
             for (Map<String, String> book : books) {
                 JSONObject jsonBook = new JSONObject();
+                System.out.println("Processing book id: " + book.get("id")); // Debug log
+                
                 jsonBook.put("_id", book.get("id"));
-                jsonBook.put("title", book.get("name")); // Map 'name' to 'title'
+                jsonBook.put("title", book.get("title")); // Get title directly
+                jsonBook.put("name", book.get("title")); // Add name for compatibility
                 jsonBook.put("author", book.get("author"));
                 jsonBook.put("category", book.get("category"));
                 jsonBook.put("description", book.get("description"));
                 jsonBook.put("price", Double.parseDouble(book.get("price")));
-                jsonBook.put("coverImg", book.get("image")); // Map 'image' to 'coverImg'
+                jsonBook.put("image", book.get("image"));
+                jsonBook.put("coverImg", book.get("image")); 
+                
+                System.out.println("Created JSON: " + jsonBook.toString()); // Debug log
                 jsonArray.put(jsonBook);
             }
             response = jsonArray.toString();
@@ -74,27 +89,36 @@ public class SearchBookHandler implements HttpHandler {
     }
 
     private List<Map<String, String>> searchBooks(String query) throws IOException {
-        if (query == null || query.trim().isEmpty()) {
+        if (query == null || query.trim().isEmpty())
+         {
             return getAllBooks();
         }
         
         final String searchQuery = query.toLowerCase().trim();
-        System.out.println("Processing search for: " + searchQuery); // Debug log
+        System.out.println("Processing search for: " + searchQuery);
         
         return getAllBooks().stream()
             .filter(book -> {
-                String name = book.get("name") != null ? book.get("name").toLowerCase() : "";
+                // Get all searchable fields
+                String title = book.get("title") != null ? book.get("title").toLowerCase() : "";
                 String author = book.get("author") != null ? book.get("author").toLowerCase() : "";
                 String category = book.get("category") != null ? book.get("category").toLowerCase() : "";
                 String description = book.get("description") != null ? book.get("description").toLowerCase() : "";
                 
-                // Debug logs
-                System.out.println("Checking book: " + name);
+                // Split search query into words to match partial words
+                String[] searchWords = searchQuery.split("\\s+");
                 
-                return name.contains(searchQuery) ||
-                       author.contains(searchQuery) ||
-                       category.contains(searchQuery) ||
-                       description.contains(searchQuery);
+                // Check if any search word is contained in any field
+                for (String word : searchWords) {
+                    if (title.contains(word) || 
+                        author.contains(word) || 
+                        category.contains(word) || 
+                        description.contains(word)) {
+                        return true;
+                    }
+                }
+                
+                return false;
             })
             .collect(Collectors.toList());
     }

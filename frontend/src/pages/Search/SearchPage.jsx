@@ -14,12 +14,12 @@ const SearchPage = ({ isLoggedIn, setShowLogin }) => {
             const query = searchParams.get('q');
             
             try {
-                const baseUrl = 'http://localhost:8000'; // Verify this is your backend port
+                const baseUrl = 'http://localhost:8000';
                 const url = query 
                     ? `${baseUrl}/api/books/search?q=${encodeURIComponent(query)}`
                     : `${baseUrl}/api/books`;
                 
-                console.log('Fetching from URL:', url); // Add this debug log
+                console.log('Fetching from URL:', url);
                 const response = await fetch(url);
                 
                 if (response.ok) {
@@ -55,7 +55,7 @@ const SearchPage = ({ isLoggedIn, setShowLogin }) => {
                     <BookItem
                         key={book._id}
                         _id={book._id}
-                        name={book.title}
+                        title={book.title}
                         description={book.description}
                         price={book.price}
                         image={book.coverImg}
