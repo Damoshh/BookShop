@@ -7,6 +7,8 @@ import Category6 from '../../assets/6.png'
 import Category7 from '../../assets/7.png'
 import Category8 from '../../assets/8.png'
 import Category9 from '../../assets/9.png'
+import Category10 from '../../assets/10.png'
+
 
 export const category_list = [
     {
@@ -45,4 +47,8 @@ export const category_list = [
         category_name: 'Historical Fiction',
         category_image: Category9
     },
+    {
+        category_name: 'Children',
+        category_image: Category10
+    }
 ]
