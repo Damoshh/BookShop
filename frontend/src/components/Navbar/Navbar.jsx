@@ -12,7 +12,7 @@ const Navbar = ({
   setInitialState
 }) => {
   const navigate = useNavigate();
-  const { cartTotalItems, cartTotal } = useContext(StoreContext);
+  const { cartTotalItems, cartTotal, clearCart} = useContext(StoreContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -24,6 +24,11 @@ const Navbar = ({
       setShowLogin(true);
     }
   };
+
+  const handleSignOut = async () => {
+    clearCart(); // Clear cart state first
+    await handleLogout(navigate, setIsLoggedIn, setUserEmail);
+};
 
   const handleSearch = async (e) => {
     const query = e.target.value;
@@ -50,10 +55,6 @@ const Navbar = ({
       setSearchQuery('');
       setSearchResults([]);
     }
-  };
-
-  const handleSignOut = () => {
-    handleLogout(navigate, setIsLoggedIn, setUserEmail);
   };
 
   const handleLogin = () => {

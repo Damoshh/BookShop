@@ -18,11 +18,22 @@ const StoreContextProvider = (props) => {
         }
     }, []);
 
+    // Add logout listener
+    useEffect(() => {
+        const handleLogoutEvent = () => {
+            setCartItems([]);
+            setCartTotal(0);
+            setCartTotalItems(0);
+        };
+
+        window.addEventListener('logout', handleLogoutEvent);
+        return () => window.removeEventListener('logout', handleLogoutEvent);
+    }, []);
+
     const fetchCart = async () => {
         if (!isAuthenticated()) return;
         try {
             const userId = getCurrentUser()?.id;
-            // Use relative URL with proxy
             const response = await fetch(`/api/cart/${userId}`, {
                 method: 'GET',
                 headers: {
@@ -102,13 +113,21 @@ const StoreContextProvider = (props) => {
         }
     };
 
+    // Move clearCart outside of removeFromCart
+    const clearCart = () => {
+        setCartItems([]);
+        setCartTotal(0);
+        setCartTotalItems(0);
+    };
+
     const value = {
         cartItems,
         cartTotal,
         cartTotalItems,
         addToCart,
         removeFromCart,
-        refreshCart: fetchCart
+        refreshCart: fetchCart,
+        clearCart  // Make sure clearCart is included in the context value
     };
 
     return (

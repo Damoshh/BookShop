@@ -35,15 +35,27 @@ export const getCurrentUser = () => {
     }
 };
 
-export const handleLogout = (navigate, setIsLoggedIn, setUserEmail) => {
+export const handleLogout = async (navigate, setIsLoggedIn, setUserEmail) => {
     try {
         const userId = localStorage.getItem('userId');
+        const sessionToken = localStorage.getItem('sessionToken');
         
-        // Remove user-specific data
+        // Clear cart in backend
         if (userId) {
-            localStorage.removeItem(`cart_${userId}`);
-            localStorage.removeItem(`wishlist_${userId}`);
+            try {
+                await fetch(`/api/cart/${userId}/clear`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${sessionToken}`
+                    }
+                });
+            } catch (error) {
+                console.error('Error clearing cart in backend:', error);
+            }
         }
+
+        // Dispatch logout event first to clear StoreContext
+        window.dispatchEvent(new Event('logout'));
         
         // Remove auth data
         localStorage.removeItem('sessionToken');
@@ -51,9 +63,11 @@ export const handleLogout = (navigate, setIsLoggedIn, setUserEmail) => {
         localStorage.removeItem('userRole');
         localStorage.removeItem('userId');
         
+        // Update state
         if (setIsLoggedIn) setIsLoggedIn(false);
         if (setUserEmail) setUserEmail('');
         
+        // Navigate
         if (navigate) navigate('/');
     } catch (error) {
         console.error('Logout error:', error);
