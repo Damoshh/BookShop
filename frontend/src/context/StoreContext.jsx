@@ -8,19 +8,113 @@ const StoreContextProvider = (props) => {
     const [cartTotal, setCartTotal] = useState(0);
     const [cartTotalItems, setCartTotalItems] = useState(0);
 
+    // Save cart state with user ID
+    const saveCartState = () => {
+        const userId = getCurrentUser()?.id;
+        if (!userId) return;
+
+        const cartState = {
+            items: cartItems,
+            total: cartTotal,
+            totalItems: cartTotalItems,
+            timestamp: new Date().getTime()
+        };
+        localStorage.setItem(`cart_${userId}`, JSON.stringify(cartState));
+    };
+
+    // Effect to save cart whenever it changes
+    useEffect(() => {
+        if (isAuthenticated() && (cartItems.length > 0 || cartTotal > 0)) {
+            saveCartState();
+        }
+    }, [cartItems, cartTotal, cartTotalItems]);
+
+    // Load cart when component mounts or user logs in
+    const loadUserCart = async () => {
+        if (!isAuthenticated()) return;
+
+        const userId = getCurrentUser()?.id;
+        if (!userId) return;
+
+        try {
+            // First try to get cart from backend
+            const response = await fetch(`/api/cart/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCurrentUser()?.token}`
+                }
+            });
+
+            if (response.ok) {
+                const backendCart = await response.json();
+                
+                // Get saved local cart
+                const savedCartJSON = localStorage.getItem(`cart_${userId}`);
+                const savedCart = savedCartJSON ? JSON.parse(savedCartJSON) : null;
+
+                // Use local cart if it's newer than backend data
+                if (savedCart && savedCart.items && savedCart.items.length > 0) {
+                    setCartItems(savedCart.items);
+                    setCartTotal(savedCart.total);
+                    setCartTotalItems(savedCart.totalItems);
+
+                    // Sync local cart to backend
+                    try {
+                        await fetch(`/api/cart/${userId}/sync`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${getCurrentUser()?.token}`
+                            },
+                            body: JSON.stringify(savedCart.items)
+                        });
+                    } catch (error) {
+                        console.error('Error syncing cart to backend:', error);
+                    }
+                } else {
+                    // Use backend cart if no local cart or local cart is empty
+                    setCartItems(backendCart.items || []);
+                    setCartTotal(backendCart.total || 0);
+                    setCartTotalItems(backendCart.totalItems || 0);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading cart:', error);
+            // Try to load from local storage if backend fails
+            const savedCartJSON = localStorage.getItem(`cart_${userId}`);
+            if (savedCartJSON) {
+                const savedCart = JSON.parse(savedCartJSON);
+                setCartItems(savedCart.items || []);
+                setCartTotal(savedCart.total || 0);
+                setCartTotalItems(savedCart.totalItems || 0);
+            }
+        }
+    };
+
+    // Initialize cart on mount
     useEffect(() => {
         if (isAuthenticated()) {
-            fetchCart();
-        } else {
-            setCartItems([]);
-            setCartTotal(0);
-            setCartTotalItems(0);
+            loadUserCart();
         }
     }, []);
 
-    // Add logout listener
+    // Listen for login
+    useEffect(() => {
+        const handleLoginStateChange = () => {
+            if (isAuthenticated()) {
+                loadUserCart();
+            }
+        };
+
+        window.addEventListener('loginStateChange', handleLoginStateChange);
+        return () => window.removeEventListener('loginStateChange', handleLoginStateChange);
+    }, []);
+
+    // Listen for logout
     useEffect(() => {
         const handleLogoutEvent = () => {
+            saveCartState(); // Save current cart state before clearing
             setCartItems([]);
             setCartTotal(0);
             setCartTotalItems(0);
@@ -28,36 +122,7 @@ const StoreContextProvider = (props) => {
 
         window.addEventListener('logout', handleLogoutEvent);
         return () => window.removeEventListener('logout', handleLogoutEvent);
-    }, []);
-
-    const fetchCart = async () => {
-        if (!isAuthenticated()) return;
-        try {
-            const userId = getCurrentUser()?.id;
-            const response = await fetch(`/api/cart/${userId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${getCurrentUser()?.token}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            setCartItems(data.items || []);
-            setCartTotal(data.total || 0);
-            setCartTotalItems(data.totalItems || 0);
-        } catch (error) {
-            console.error('Error fetching cart:', error);
-            setCartItems([]);
-            setCartTotal(0);
-            setCartTotalItems(0);
-        }
-    };
+    }, [cartItems, cartTotal, cartTotalItems]);
 
     const addToCart = async (bookId) => {
         if (!isAuthenticated()) return;
@@ -69,10 +134,7 @@ const StoreContextProvider = (props) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${getCurrentUser()?.token}`
                 },
-                body: JSON.stringify({ 
-                    userId, 
-                    bookId
-                })
+                body: JSON.stringify({ userId, bookId })
             });
             
             if (response.ok) {
@@ -80,12 +142,9 @@ const StoreContextProvider = (props) => {
                 setCartItems(updatedCart.items || []);
                 setCartTotal(updatedCart.total || 0);
                 setCartTotalItems(updatedCart.totalItems || 0);
-            } else {
-                throw new Error('Failed to add item to cart');
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
-            alert('Failed to add item to cart. Please try again.');
         }
     };
 
@@ -113,8 +172,25 @@ const StoreContextProvider = (props) => {
         }
     };
 
-    // Move clearCart outside of removeFromCart
-    const clearCart = () => {
+    const clearCart = async () => {
+        const userId = getCurrentUser()?.id;
+        if (userId) {
+            localStorage.removeItem(`cart_${userId}`);
+        }
+        
+        if (isAuthenticated()) {
+            try {
+                await fetch(`/api/cart/${userId}/clear`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getCurrentUser()?.token}`
+                    }
+                });
+            } catch (error) {
+                console.error('Error clearing cart in backend:', error);
+            }
+        }
+        
         setCartItems([]);
         setCartTotal(0);
         setCartTotalItems(0);
@@ -126,8 +202,8 @@ const StoreContextProvider = (props) => {
         cartTotalItems,
         addToCart,
         removeFromCart,
-        refreshCart: fetchCart,
-        clearCart  // Make sure clearCart is included in the context value
+        refreshCart: loadUserCart,
+        clearCart
     };
 
     return (
