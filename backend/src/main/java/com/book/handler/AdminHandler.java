@@ -3,13 +3,13 @@ package com.book.handler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,38 +19,79 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class AdminHandler implements HttpHandler {
-    private static final String ADMIN_CSV = "backend/admins.csv";
+    private static final String ADMIN_CSV = "admins.csv";
     private Map<String, String> activeSessionTokens = new HashMap<>();
 
-    @SuppressWarnings({"ConvertToTryWithResources", "CallToPrintStackTrace"})
-    public AdminHandler() {
-        try {
-            File file = new File(ADMIN_CSV);
-            file.getParentFile().mkdirs();
-            
-            if (!file.exists()) {
-                FileWriter fw = new FileWriter(file);
-                fw.write("email,password\n");
-                fw.write("admin@readify.com,admin123\n");
-                fw.close();
-                System.out.println("Created new admins.csv file at: " + file.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.err.println("Error initializing admins.csv: " + e.getMessage());
-            e.printStackTrace();
-        }
+    private boolean validateEmail(String email) {
+        return email != null && email.toLowerCase().endsWith("@readify.com");
     }
 
-    public boolean validateAuthToken(String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            return activeSessionTokens.containsValue(token);
+    private boolean validateAdmin(String email, String password) {
+        if (!validateEmail(email)) {
+            System.out.println("Email validation failed for: " + email);
+            return false;
         }
+    
+        File file = new File(ADMIN_CSV);
+        System.out.println("\n=== Admin Login Debug Info ===");
+        System.out.println("1. CSV File Path: " + file.getAbsolutePath());
+        System.out.println("2. File exists: " + file.exists());
+        System.out.println("3. Attempting login with:");
+        System.out.println("   - Email: " + email);
+        System.out.println("   - Password: " + password);
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean firstLine = true;
+            int lineNumber = 0;
+            
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                System.out.println("\n4. Reading line " + lineNumber + ": " + line);
+                
+                if (firstLine) {
+                    System.out.println("   - This is the header line, skipping");
+                    firstLine = false;
+                    continue;
+                }
+                
+                String[] values = line.split(",");
+                System.out.println("5. Split line into " + values.length + " values:");
+                for (int i = 0; i < values.length; i++) {
+                    System.out.println("   - Column " + i + ": [" + values[i].trim() + "]");
+                }
+                
+                if (values.length >= 3) {
+                    String csvEmail = values[1].trim();
+                    String csvPassword = values[2].trim();
+                    
+                    System.out.println("\n6. Comparing credentials:");
+                    System.out.println("   - CSV Email: [" + csvEmail + "] vs Input Email: [" + email + "]");
+                    System.out.println("   - CSV Password: [" + csvPassword + "] vs Input Password: [" + password + "]");
+                    
+                    if (csvEmail.equals(email) && csvPassword.equals(password)) {
+                        System.out.println("7. ✅ Credentials match!");
+                        return true;
+                    } else {
+                        System.out.println("7. ❌ Credentials don't match");
+                    }
+                } else {
+                    System.out.println("\n⚠️ Warning: Line has fewer than 3 columns");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("\n🛑 Error reading admin CSV:");
+            System.err.println("- Message: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        System.out.println("\n8. ❌ No matching credentials found");
         return false;
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        // Existing CORS headers are fine from what we see in Main.java
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type,Authorization");
@@ -112,33 +153,6 @@ public class AdminHandler implements HttpHandler {
             System.out.println("Error in admin login: " + e.getMessage());
             sendResponse(exchange, 400, "Invalid request");
         }
-    }
-
-    private boolean validateAdmin(String email, String password) {
-        File file = new File(ADMIN_CSV);
-        System.out.println("Checking admin credentials in: " + file.getAbsolutePath());
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            boolean firstLine = true;
-            
-            while ((line = reader.readLine()) != null) {
-                if (firstLine) {
-                    firstLine = false;
-                    continue;
-                }
-                
-                String[] values = line.split(",");
-                if (values.length >= 2 && 
-                    values[0].trim().equals(email) && 
-                    values[1].trim().equals(password)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading admin CSV: " + e.getMessage());
-        }
-        return false;
     }
 
     private void sendJsonResponse(HttpExchange exchange, int statusCode, JSONObject jsonResponse) throws IOException {

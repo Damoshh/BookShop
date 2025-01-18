@@ -26,7 +26,11 @@ const Navbar = ({
   };
 
   const handleSignOut = async () => {
-    clearCart(); // Clear cart state first
+    clearCart();
+    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
     await handleLogout(navigate, setIsLoggedIn, setUserEmail);
 };
 

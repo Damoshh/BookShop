@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './LoginPopup.css';
-import { handleLogin } from '../../utils/auth';
 
 const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, navigate}) => {
   const [formData, setFormData] = useState({
@@ -37,13 +36,24 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
             }
 
             const data = await response.json();
-            localStorage.setItem('sessionToken', data.token);
+            
+            // Store admin token consistently
+            localStorage.setItem('adminToken', data.token);
+            localStorage.setItem('sessionToken', data.token); // Add this for consistency
             localStorage.setItem('userEmail', formData.email);
             localStorage.setItem('userRole', 'admin');
             
             setIsLoggedIn(true);
             setUserEmail(formData.email);
+            
+            // Force a page reload to update authentication state
+            window.dispatchEvent(new Event('loginStateChange'));
+            
+            // Use navigate to redirect to admin dashboard
             navigate('/admin');
+            
+            // Close the popup after navigation
+            setShowLogin(false);
         } else {
             // Handle regular user login/signup using proxy
             const payload = {
@@ -68,17 +78,18 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
             
             localStorage.setItem('sessionToken', data.token);
             localStorage.setItem('userEmail', formData.email);
-            localStorage.setItem('userRole', data.role || 'user');
+            localStorage.setItem('userRole', 'user');
             localStorage.setItem('userId', data.userId);
 
             window.dispatchEvent(new Event('loginStateChange'));
 
             setIsLoggedIn(true);
             setUserEmail(formData.email);
+            setShowLogin(false);
         }
 
-        setShowLogin(false);
-        alert(initialState === 'Sign Up' ? 'Account created successfully!' : 'Login successful');
+        alert(isAdminLogin ? 'Admin login successful!' : 
+              (initialState === 'Sign Up' ? 'Account created successfully!' : 'Login successful'));
         
     } catch (error) {
         console.error('Error:', error);
@@ -88,6 +99,8 @@ const LoginPopup = ({setShowLogin, setIsLoggedIn, setUserEmail, initialState, na
         setFormData({ name: '', email: '', password: '' });
     }
   };
+
+  // Rest of the component remains the same...
 
   const handleChange = (e) => {
     setFormData({

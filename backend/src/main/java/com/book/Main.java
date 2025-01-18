@@ -8,7 +8,7 @@ import com.book.handler.AdminDashboardHandler;
 import com.book.handler.AdminHandler;
 import com.book.handler.BookHandler;
 import com.book.handler.CartHandler;
-import com.book.handler.OrderHandler;
+/*import com.book.handler.OrderHandler;*/
 import com.book.handler.SearchBookHandler;
 import com.book.handler.UserHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -112,7 +112,7 @@ public class Main {
                 }
                 new AdminDashboardHandler().handle(exchange);
             });
-
+/*
             server.createContext("/api/admin/orders", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
@@ -121,7 +121,7 @@ public class Main {
                 }
                 new OrderHandler(adminHandler).handle(exchange);
             });
-
+ */
             server.createContext("/api/books/category/", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
