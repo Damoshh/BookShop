@@ -6,7 +6,9 @@ const Footer = () => {
         <footer className='footer'>
             <div className='top'>
                 <div className='branding'>
+                <div className='readify-box'>
                     <h2>Readify.</h2>
+                    </div>
                     <p>A room without books is like a body without a soul.</p>
                 </div>
                 <div className='social-links'>
@@ -51,17 +53,9 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className='newsletter'>
-                <h4>Stay Updated</h4>
-                <p>Subscribe and get to know the latest launches and exclusive deals.</p>
-                <form>
-                    <input type="email" placeholder="Enter your email" required />
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
+            
             <div>
-                <h5 classname="Copy"> © 2025 Readify by HCLC (M) SDN BHD (204105036631). All Rights Reserved.
-                  
+                <h5 classname="Copy"> © 2025 Readify by HCLC (M) SDN BHD (204105036631). All Rights Reserved.  
                 </h5>
             </div>
         </footer>
