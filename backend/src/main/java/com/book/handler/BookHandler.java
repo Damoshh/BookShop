@@ -35,13 +35,23 @@ public class BookHandler implements HttpHandler {
             JSONArray jsonArray = new JSONArray();
             for (Map<String, String> book : books) {
                 JSONObject jsonBook = new JSONObject();
+                // Debug each field
+                System.out.println("Processing book id: " + book.get("id"));
+                System.out.println("Title: " + book.get("title"));
+                
                 jsonBook.put("_id", book.get("id"));
-                jsonBook.put("title", book.get("title")); // Using name from CSV
+                jsonBook.put("title", book.get("title")); // Put title first
+                jsonBook.put("name", book.get("title")); // Then name for backwards compatibility
                 jsonBook.put("author", book.get("author"));
                 jsonBook.put("category", book.get("category"));
                 jsonBook.put("description", book.get("description"));
                 jsonBook.put("price", Double.parseDouble(book.get("price")));
-                jsonBook.put("image", book.get("image")); // Using image from CSV
+                jsonBook.put("image", book.get("image"));
+                jsonBook.put("coverImg", book.get("image"));
+                
+                // Debug final JSON
+                System.out.println("Created JSON: " + jsonBook.toString());
+                
                 jsonArray.put(jsonBook);
             }
             response = jsonArray.toString();
@@ -65,43 +75,46 @@ public class BookHandler implements HttpHandler {
     private List<Map<String, String>> getAllBooks() throws IOException {
         List<Map<String, String>> books = new ArrayList<>();
         
-        // Get current working directory
-        String currentPath = System.getProperty("user.dir");
-        System.out.println("Current working directory: " + currentPath);
-        
-        File file = new File(BOOKS_CSV_PATH);
-        System.out.println("Absolute path of books.csv: " + file.getAbsolutePath());
-        System.out.println("Does books.csv exist? " + file.exists());
-    
-        if (!file.exists()) {
-            System.out.println("Books CSV file not found at: " + file.getAbsolutePath());
-            return books;
-        }
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_CSV_PATH))) {
             String headerLine = reader.readLine();
             if (headerLine == null) {
                 System.out.println("CSV file is empty!");
                 return books;
             }
             
+            // Debug the headers
             System.out.println("CSV Headers: " + headerLine);
             
             String[] headers = headerLine.split(",");
-            String line;
-            int lineCount = 0;
-            while ((line = reader.readLine()) != null) {
-                System.out.println("Reading line: " + line);
-                String[] values = line.split(",");
-                Map<String, String> book = new HashMap<>();
-                for (int i = 0; i < headers.length && i < values.length; i++) {
-                    book.put(headers[i].trim(), values[i].trim());
-                }
-                books.add(book);
-                lineCount++;
+            for (int i = 0; i < headers.length; i++) {
+                headers[i] = headers[i].trim();
+                System.out.println("Header " + i + ": '" + headers[i] + "'");
             }
-            System.out.println("Total books read: " + lineCount);
+            
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values.length >= headers.length) {
+                    Map<String, String> book = new HashMap<>();
+                    for (int i = 0; i < headers.length; i++) {
+                        String value = values[i].trim();
+                        // Remove any quotes
+                        value = value.replaceAll("^\"|\"$", "");
+                        book.put(headers[i], value);
+                    }
+                    
+                    // Debug the book object
+                    System.out.println("Created book: " + book);
+                    
+                    books.add(book);
+                } else {
+                    System.out.println("Warning: Malformed line: " + line);
+                }
+            }
         }
+        
+        // Debug final list
+        System.out.println("Total books loaded: " + books.size());
         return books;
     }
 

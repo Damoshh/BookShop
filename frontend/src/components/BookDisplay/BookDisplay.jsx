@@ -13,52 +13,46 @@ const BookDisplay = ({ category, isLoggedIn, setShowLogin, setInitialState }) =>
                 setLoading(true);
                 setError(null);
                 
-                // Use relative URL since we've configured the proxy
                 const url = category && category !== 'All' 
                     ? `/api/books/category/${encodeURIComponent(category)}`
                     : `/api/books`;
         
                 console.log('Fetching books from:', url);
         
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-        
+                const response = await fetch(url);
                 const data = await response.json();
-                console.log('Received data:', data);
+                
+                // Debug logs
+                console.log('Raw response data:', data);
                 
                 if (!Array.isArray(data)) {
                     throw new Error('Invalid data format received from server');
                 }
         
-                const validatedBooks = data.map(book => ({
-                    _id: book._id,
-                    name: book.name,
-                    author: book.author || 'Unknown Author',
-                    category: book.category || 'Uncategorized',
-                    description: book.description || '',
-                    price: typeof book.price === 'number' ? book.price : 0,
-                    image: book.image || '/placeholder-book.jpg'
-                }));
+                const validatedBooks = data.map(book => {
+                    console.log('Processing book:', book);  // Debug log for each book
+                    return {
+                        _id: book._id,
+                        title: book.title || book.name,  // Try both title and name
+                        author: book.author || 'Unknown Author',
+                        category: book.category || 'Uncategorized',
+                        description: book.description || '',
+                        price: typeof book.price === 'number' ? book.price : 0,
+                        image: book.image || book.coverImg || '/placeholder-book.jpg'
+                    };
+                });
         
+                console.log('Validated books:', validatedBooks);
                 setDisplayedBooks(validatedBooks);
-                setError(null);
+                
             } catch (error) {
                 console.error('Error fetching books:', error);
                 setError(error.message);
-                setDisplayedBooks([]);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchBooksByCategory();
     }, [category]);
 
@@ -96,7 +90,13 @@ const BookDisplay = ({ category, isLoggedIn, setShowLogin, setInitialState }) =>
                 {displayedBooks.map((book) => (
                     <BookItem
                         key={book._id}
-                        {...book}
+                        _id={book._id}
+                        title={book.title}
+                        author={book.author}
+                        category={book.category}
+                        description={book.description}
+                        price={book.price}
+                        image={book.image}
                         isLoggedIn={isLoggedIn}
                         setShowLogin={setShowLogin}
                         setInitialState={setInitialState}

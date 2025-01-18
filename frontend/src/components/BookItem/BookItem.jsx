@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 
 const BookItem = ({ 
     _id, 
-    name, 
+    title,
     price, 
     description, 
     image, 
@@ -16,7 +16,6 @@ const BookItem = ({
 }) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
 
-    // Find cart item quantity
     const quantity = cartItems?.find(item => item.bookId === _id)?.quantity || 0;
 
     const handleAddToCart = async (e) => {
@@ -47,49 +46,51 @@ const BookItem = ({
     };
 
     return (
-        <div className='book-item'>
-            <div className='book-item-img-container'>
+        <div className='single-book-item'>
+            <div className='single-book-img-container'>
                 <img 
-                    className='book-item-image'
+                    className='single-book-image'
                     src={image || '/placeholder-book.jpg'}
-                    alt={name}
+                    alt={title}
                     loading="lazy"
                     onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/placeholder-book.jpg';
                     }}
                 />
-                <div className="book-item-actions">
+                <div className="single-book-actions">
                     {quantity === 0 ? (
                         <i 
-                            className="fa-solid fa-circle-plus"
+                            className="fa-solid fa-circle-plus single-book-add"
                             onClick={handleAddToCart}
                             title={isLoggedIn ? "Add to cart" : "Login to add to cart"}
                         />
                     ) : (
-                        <div className="book-item-counter">
+                        <div className="single-book-counter">
                             <i 
-                                className="fa-solid fa-circle-minus"
+                                className="fa-solid fa-circle-minus single-book-remove"
                                 onClick={handleRemoveFromCart}
                             />
                             <span>{quantity}</span>
                             <i 
-                                className="fa-solid fa-circle-plus"
+                                className="fa-solid fa-circle-plus single-book-add"
                                 onClick={handleAddToCart}
                             />
                         </div>
                     )}
                 </div>
             </div>
-            <div className="book-item-info">
-                <h3 className="book-item-name">{name}</h3>
-                {author && <p className="book-item-author">{author}</p>}
-                {category && <p className="book-item-category">{category}</p>}
-                <p className="book-item-desc">{description}</p>
-                <p className="book-item-price">
-                    RM {typeof price === 'number' ? price.toFixed(2) : '0.00'}
-                </p>
-            </div>
+            <div className="single-book-info">
+    <h3 className="single-book-title">
+        {title || 'Untitled Book'}
+    </h3>
+    {author && <p className="single-book-author">{author}</p>}
+    {category && <p className="single-book-category">{category}</p>}
+    <p className="single-book-description">{description || 'No description available'}</p>
+    <p className="single-book-price">
+        RM {typeof price === 'number' ? price.toFixed(2) : '0.00'}
+    </p>
+</div>
         </div>
     );
 };
