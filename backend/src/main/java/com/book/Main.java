@@ -104,6 +104,15 @@ public class Main {
                 adminHandler.handle(exchange);
             });
 
+            server.createContext("/api/admin/profile", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                adminHandler.handle(exchange);
+            });
+
             server.createContext("/api/admin/dashboard", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
@@ -157,10 +166,11 @@ public class Main {
         exchange.getResponseHeaders().remove("Access-Control-Allow-Methods");
         exchange.getResponseHeaders().remove("Access-Control-Allow-Headers");
         
-        // Add CORS headers
+        // Add CORS headers with consistent configuration
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "http://localhost:5173");
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization, x-user-email");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Credentials", "true");
         exchange.getResponseHeaders().set("Access-Control-Max-Age", "3600");
         
         // For CORS preflight response

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation, Navigate } from "react-router-dom";
-import { isAuthenticated } from './utils/auth.js';
+import { isAuthenticated, isAdmin } from './utils/auth.js';
 
 // Components
 import Navbar from "./components/Navbar/Navbar";
@@ -36,7 +36,8 @@ const LayoutWrapper = ({
   setTheme, 
   isLoggedIn, 
   userEmail, 
-  setInitialState 
+  setInitialState,
+  isAdminUser 
 }) => {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
@@ -63,6 +64,7 @@ const LayoutWrapper = ({
           userEmail={userEmail}
           setUserEmail={setUserEmail}
           setInitialState={setInitialState}
+          isAdminUser={isAdminUser}
         />
       )}
       
@@ -84,6 +86,7 @@ function App() {
   // Auth states
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(() => isAuthenticated());
+  const [isAdminUser, setIsAdminUser] = useState(() => isAdmin());
   const [userEmail, setUserEmail] = useState(() => 
     localStorage.getItem('userEmail') || ''
   );
@@ -98,9 +101,11 @@ function App() {
   useEffect(() => {
     const checkAuth = () => {
       const authenticated = isAuthenticated();
+      const adminStatus = isAdmin();
       const storedEmail = localStorage.getItem('userEmail');
       
       setIsLoggedIn(authenticated);
+      setIsAdminUser(adminStatus);
       setUserEmail(authenticated ? storedEmail : '');
       
       if (!authenticated) {
@@ -109,8 +114,23 @@ function App() {
     };
 
     window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
+    window.addEventListener('loginStateChange', checkAuth);
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('loginStateChange', checkAuth);
+    };
   }, []);
+
+  useEffect(() => {
+    console.log('Auth State:', {
+      sessionToken: localStorage.getItem('sessionToken'),
+      userEmail: localStorage.getItem('userEmail'),
+      userId: localStorage.getItem('userId'),
+      userRole: localStorage.getItem('userRole'),
+      isLoggedIn: isLoggedIn,
+      showLogin: showLogin
+    });
+  }, [isLoggedIn, showLogin]);
 
   return (
     <StoreContextProvider>
@@ -126,6 +146,7 @@ function App() {
           isLoggedIn={isLoggedIn}
           userEmail={userEmail}
           setInitialState={setInitialState}
+          isAdminUser={isAdminUser}
         >
           <Routes>
             {/* Public Routes */}
@@ -170,6 +191,12 @@ function App() {
             } />
 
             {/* Protected Admin Routes */}
+            <Route path="/admin" element={
+              <ProtectedRoute requiresAdmin={true}>
+                <Navigate to="/admin/dashboard" replace />
+              </ProtectedRoute>
+            } />
+            
             <Route path="/admin/*" element={
               <ProtectedRoute requiresAdmin={true}>
                 <AdminDashboard />

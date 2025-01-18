@@ -4,6 +4,14 @@ export const isAuthenticated = () => {
     try {
         const sessionToken = localStorage.getItem('sessionToken');
         const userEmail = localStorage.getItem('userEmail');
+        const userRole = localStorage.getItem('userRole');
+        
+        // For admin users, we don't need userId
+        if (userRole === 'admin') {
+            return Boolean(sessionToken && userEmail);
+        }
+        
+        // For regular users, we need userId
         const userId = localStorage.getItem('userId');
         return Boolean(sessionToken && userEmail && userId);
     } catch (error) {
