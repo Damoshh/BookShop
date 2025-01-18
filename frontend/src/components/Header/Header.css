@@ -1,40 +1,106 @@
-.header{
+.header {
     margin: 30px auto;
-    background: url('../../assets/imgHeader.jpg') no-repeat;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/imgHeader.jpg') no-repeat;
     background-size: cover;
+    background-position: center;
     position: relative;
     border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.header-content{
+.header-content {
     position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 1.5vw;
-    max-width: 50%;
-    bottom: 10%;
-    left: 6vw;
-    animation: fadeIn 3s;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 600px;
+    bottom: 15%;
+    left: 8%;
+    animation: fadeIn 1.5s ease-out;
 }
 
-.header-content h2{
-    font-weight: 500;
-    color: aliceblue;
-    font-size: max(4.5vw,22px);
+.header-content h2 {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 3.5rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.header-content p{
-    color: aliceblue;
-    font-size: 1vw;
+.header-content p {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    line-height: 1.6;
 }
 
-.header-content button{
-    border: nonw;
-    color: rgb(22, 22, 22);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    background-color: aliceblue;
-    font-size: max(1vw, 13px);
+.header-content button {
+    border: none;
+    color: #1a1a1a;
+    font-weight: 600;
+    padding: 12px 30px;
+    background-color: #ffffff;
+    font-size: 1.1rem;
     border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content button:hover {
+    transform: translateY(-2px);
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .header {
+        height: 400px;
+    }
+
+    .header-content {
+        max-width: 90%;
+        bottom: 10%;
+        left: 5%;
+    }
+
+    .header-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .header-content p {
+        font-size: 1rem;
+    }
+
+    .header-content button {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 300px;
+        margin: 15px auto;
+    }
+
+    .header-content h2 {
+        font-size: 2rem;
+    }
 }

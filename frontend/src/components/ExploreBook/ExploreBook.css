@@ -1,32 +1,50 @@
-.explore-book{
+.explore-book {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
+    padding: 20px 0;
 }
 
-.explore-book h1{
-    color: black;
-    font-weight: 500;
-    font-size: 2rem;
+.explore-book h1 {
+    color: #333;
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin: 0;
+    position: relative;
+    display: inline-block;
 }
 
-.explore-book-text{
+.explore-book h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: #22801e;
+    border-radius: 2px;
+}
+
+.explore-book-text {
     max-width: 60%;
-    columns: #fff;
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.explore-book-list{
+.explore-book-list {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-    margin: 20px 0px;
-    overflow-x: scroll;
+    gap: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 10px 5px;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    position: relative;
 }
 
-.explore-book-list::-webkit-scrollbar{
+.explore-book-list::-webkit-scrollbar {
     display: none;
 }
 
@@ -35,72 +53,83 @@
     flex-direction: column;
     align-items: center;
     min-width: 120px;
+    transition: transform 0.3s ease;
 }
 
-.explore-book-list-item img{
+.explore-book-list-item:hover {
+    transform: translateY(-5px);
+}
+
+.explore-book-list-item img {
     width: 96px;
     height: 96px;
     cursor: pointer;
     border-radius: 50%;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Wishlist icon styles */
-.wishlist-icon-container {
-    width: 96px;
-    height: 96px;
+.explore-book-list-item p {
+    margin-top: 12px;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: 0.2s;
+    transition: color 0.3s ease;
 }
 
-.wishlist-icon {
-    font-size: 40px;
+.explore-book-list-item:hover p {
     color: #22801e;
 }
 
-.wishlist-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #22801e;
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.explore-book-list-item p{
-    margin-top: 10px;
-    color: rgb(0, 0, 0);
-    font-size: max(1.4vw, 16px);
-    cursor: pointer;
-}
-
-.explore-book hr{
-    margin: 10px 0px;
-    height: 2px;
-    background-color: #000000;
+.explore-book hr {
+    margin: 20px 0;
+    height: 1px;
+    background-color: #e0e0e0;
     border: none;
+    width: 100%;
 }
 
-.explore-book-list-item .active{
-    border: 4px solid #22801e;
-    padding: 2px;
+.explore-book-list-item .active {
+    border: 3px solid #22801e;
+    padding: 3px;
+    box-shadow: 0 6px 16px rgba(34, 128, 30, 0.2);
 }
 
-.wishlist-icon-container.active {
-    border: 4px solid #22801e;
-    padding: 2px;
-    background-color: #e8f5e9;
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .explore-book {
+        gap: 20px;
+    }
+
+    .explore-book h1 {
+        font-size: 2rem;
+    }
+
+    .explore-book-text {
+        max-width: 100%;
+        font-size: 1rem;
+    }
+
+    .explore-book-list {
+        gap: 15px;
+        padding: 5px 0;
+    }
+
+    .explore-book-list-item img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .explore-book h1 {
+        font-size: 1.75rem;
+    }
+
+    .explore-book-list-item img {
+        width: 70px;
+        height: 70px;
+    }
 }

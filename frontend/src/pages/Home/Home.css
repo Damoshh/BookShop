@@ -1,3 +1,13 @@
-.home{
-    margin: 5rem;
+.home {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+/* Add responsive padding */
+@media (max-width: 768px) {
+    .home {
+        padding: 10px;
+    }
 }
