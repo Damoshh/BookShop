@@ -27,6 +27,10 @@
     margin: auto;
   }
 
+  .min-h-screen{
+    min-height: 40rem;
+  }
+
   @keyframes fadeIn {
     0%{
       opacity: 0;

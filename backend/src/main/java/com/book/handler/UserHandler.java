@@ -1,6 +1,7 @@
 package com.book.handler;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -227,38 +228,80 @@ public class UserHandler implements HttpHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private void handleRegister(HttpExchange exchange, JSONObject json) throws IOException {
-        String name = (String) json.get("name");
-        String email = (String) json.get("email");
-        String password = (String) json.get("password");
+private void handleRegister(HttpExchange exchange, JSONObject json) throws IOException {
+    // Extract all required fields from JSON
+    String name = (String) json.get("name");
+    String email = (String) json.get("email");
+    String password = (String) json.get("password");
+    String phone = (String) json.get("phone");
+    String street = (String) json.get("street");
+    String city = (String) json.get("city");
+    String state = (String) json.get("state");
+    String zipcode = (String) json.get("zipcode");
+    String country = (String) json.get("country");
 
-        if (name == null || email == null || password == null) {
-            sendResponse(exchange, 400, "Missing required fields");
-            return;
-        }
+    // Validate required fields
+    if (name == null || email == null || password == null) {
+        sendResponse(exchange, 400, "Missing required fields");
+        return;
+    }
 
-        if (userExists(email)) {
-            sendResponse(exchange, 400, "Email already exists");
-            return;
-        }
+    // Check if user already exists
+    if (userExists(email)) {
+        sendResponse(exchange, 400, "Email already exists");
+        return;
+    }
 
-        String userId = generateUserId();
-        File file = new File(CSV_FILE);
-        try (FileWriter fw = new FileWriter(file, true)) {
-            // Write new user with empty address fields
-            fw.write(String.format("%s,%s,%s,%s,,,,,,user\n", 
-                userId, name, email, password));
-
-            JSONObject response = new JSONObject();
-            response.put("userId", userId);
-            response.put("name", name);
-            response.put("email", email);
-            response.put("token", generateToken());
-            response.put("role", "user");
-
-            sendJsonResponse(exchange, 201, response);
+    String userId = generateUserId();
+    List<String> existingUsers = new ArrayList<>();
+    
+    // Read existing users
+    try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            existingUsers.add(line);
         }
     }
+    
+    // Write all users including the new one
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
+        // Write header if file is empty
+        if (existingUsers.isEmpty()) {
+            writer.write("userId,name,email,password,phone,street,city,state,zipcode,country,role\n");
+        } else {
+            // Write existing users
+            for (String line : existingUsers) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+        
+        // Write new user
+        writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+            userId,
+            name,
+            email,
+            password,
+            phone != null ? phone : "",
+            street != null ? street : "",
+            city != null ? city : "",
+            state != null ? state : "",
+            zipcode != null ? zipcode : "",
+            country != null ? country : "Malaysia",
+            "user"
+        ));
+        writer.newLine();
+    }
+
+    JSONObject response = new JSONObject();
+    response.put("userId", userId);
+    response.put("name", name);
+    response.put("email", email);
+    response.put("token", generateToken());
+    response.put("role", "user");
+
+    sendJsonResponse(exchange, 201, response);
+}
 
     // Existing helper methods remain the same
     private String generateUserId() {

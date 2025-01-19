@@ -5,7 +5,13 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
+        phone: '',
+        street: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        country: 'Malaysia'
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isAdminLogin, setIsAdminLogin] = useState(false);
@@ -18,8 +24,7 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
             setIsSubmitting(true);
 
             if (isAdminLogin) {
-                console.log('Starting admin login process...');
-                
+                // Admin login logic remains the same
                 const response = await fetch('http://localhost:8000/api/admin/login', {
                     method: 'POST',
                     headers: {
@@ -33,49 +38,31 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
                     }),
                 });
 
-                console.log('Login response status:', response.status);
-                
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || 'Admin login failed');
                 }
 
                 const data = await response.json();
-                console.log('Login response data:', data);
                 
-                if (!data.token) {
-                    console.error('No token received in response');
-                    throw new Error('No token received from server');
-                }
-                
-                // Store admin data
                 localStorage.setItem('sessionToken', data.token);
                 localStorage.setItem('userEmail', formData.email);
                 localStorage.setItem('userRole', 'admin');
                 
-                // Verify storage
-                console.log('Stored auth data:', {
-                    token: localStorage.getItem('sessionToken'),
-                    email: localStorage.getItem('userEmail'),
-                    role: localStorage.getItem('userRole')
-                });
-
                 setIsLoggedIn(true);
                 setUserEmail(formData.email);
-                
                 window.dispatchEvent(new Event('loginStateChange'));
-                
-                console.log('About to navigate to admin dashboard...');
-                navigate('/admin/dashboard'); // Changed from '/admin' to '/admin/dashboard'
+                navigate('/admin/dashboard');
                 setShowLogin(false);
-                
                 alert('Admin login successful!');
             } else {
-                // Regular user login/signup remains the same
+                // Regular user login/signup
                 const payload = {
                     action: initialState === 'Sign Up' ? 'register' : 'login',
                     ...formData
                 };
+
+                console.log('Sending payload:', payload); // Debug log
 
                 const response = await fetch('http://localhost:8000/api/users', {
                     method: 'POST',
@@ -97,38 +84,26 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
                 localStorage.setItem('userRole', 'user');
                 localStorage.setItem('userId', data.userId);
 
-                window.dispatchEvent(new Event('loginStateChange'));
-
                 setIsLoggedIn(true);
                 setUserEmail(formData.email);
+                window.dispatchEvent(new Event('loginStateChange'));
                 setShowLogin(false);
 
-                navigate('/'); // Redirect regular users to home
+                navigate('/');
                 alert(initialState === 'Sign Up' ? 'Account created successfully!' : 'Login successful');
             }
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('Authentication error:', error);
             alert(error.message || 'An unexpected error occurred');
         } finally {
             setIsSubmitting(false);
-            setFormData({ name: '', email: '', password: '' });
         }
     };
 
-    // Rest of the component remains the same
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
-        });
-    };
-
-    const toggleAdminLogin = () => {
-        setIsAdminLogin(!isAdminLogin);
-        setFormData({
-            name: '',
-            email: '',
-            password: ''
         });
     };
 
@@ -145,15 +120,62 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
 
                 <div className="login-popup-inputs">
                     {initialState === 'Sign Up' && !isAdminLogin && (
-                        <input 
-                            type="text" 
-                            name="name"
-                            placeholder="Your name" 
-                            required
-                            value={formData.name}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
-                        />
+                        <>
+                            <input 
+                                type="text" 
+                                name="name"
+                                placeholder="Your name" 
+                                required
+                                value={formData.name}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <input 
+                                type="tel" 
+                                name="phone"
+                                placeholder="Phone number" 
+                                required
+                                value={formData.phone}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <input 
+                                type="text" 
+                                name="street"
+                                placeholder="Street address" 
+                                required
+                                value={formData.street}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <input 
+                                type="text" 
+                                name="city"
+                                placeholder="City" 
+                                required
+                                value={formData.city}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <input 
+                                type="text" 
+                                name="state"
+                                placeholder="State" 
+                                required
+                                value={formData.state}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <input 
+                                type="text" 
+                                name="zipcode"
+                                placeholder="Zipcode" 
+                                required
+                                value={formData.zipcode}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                        </>
                     )}
                     <input 
                         type="email" 
@@ -189,10 +211,10 @@ const LoginPopup = ({ setShowLogin, setIsLoggedIn, setUserEmail, initialState, n
                                 : 'Login'))}
                 </button>
                 
-                {!isSubmitting && (
+                {!isSubmitting && initialState === 'Login' && (
                     <button 
                         type="button"
-                        onClick={toggleAdminLogin}
+                        onClick={() => setIsAdminLogin(!isAdminLogin)}
                         className="admin-toggle-button"
                     >
                         {isAdminLogin ? 'Switch to User Login' : 'Admin Login'}
