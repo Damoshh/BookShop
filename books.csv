@@ -1,8 +1,7 @@
 id,title,author,category,description,price,image
-1,The Garden of Evening Mists,Tan Twan Eng,Historical Fiction,A poignant story of love memory and war in the Cameron Highlands,35.50,/images/garden_of_evening_mists.jpeg
-2,To Kill a Mockingbird,Harper Lee,Historical Fiction,A classic novel exploring racial injustice in the Deep South,24.99,/images/to_kill_a_mockingbird.jpeg
-3,A Doctor in the House,Mahathir Mohamad,Non-Fiction,The memoirs of Malaysia’s longest-serving Prime Minister,45.00,/images/doctor_in_the_house.jpg
-4,Sapiens: A Brief History of Humankind,Yuval Noah Harari,Non-Fiction,A fascinating journey through the history of humanity,29.99,/images/sapiens.jpg
+1,The Garden of Evening Mists,Tan Twan Eng,Historical,A poignant story of love memory and war in the Cameron Highlands,35.50,/images/garden_of_evening_mists.jpeg
+2,To Kill a Mockingbird,Harper Lee,Historical,A classic novel exploring racial injustice in the Deep South,24.99,/images/to_kill_a_mockingbird.jpeg
+4,Sapiens: A Brief History of Humankind,Yuval Noah Harari,Historical,A fascinating journey through the history of humanity,29.99,/images/sapiens.jpg
 5,Malaysian Tales: Retold and Remixed,Edited by Daphne Lee,Romance,A collection of tales and folklores set in Malaysia,22.50,/images/malaysian_tales.jpg
 6,Pride and Prejudice,Jane Austen,Romance,A timeless tale of love and societal expectations,19.99,/images/pride_and_prejudice.jpg
 7,Operation Nasi Kerabu,Zaharan Razak,Action,A gripping account of the Patani Islamic insurgency,33.00,/images/operation_nasi_kerabu.jpg
@@ -19,3 +18,14 @@ id,title,author,category,description,price,image
 18,The War of the Worlds,H.G. Wells,Science Fiction,A classic story of alien invasion and survival,22.99,/images/waroftheworlds.jpg
 19,The Lorax,Dr. Seuss,Children,A beloved children’s story advocating for environmental conservation,15.99,/images/the-lorax-5.jpg
 20,Charlotte’s Web,E.B. White,Children,The heartwarming tale of friendship between a pig and a spider,14.99,/images/charlotteweb.jpg
+21,Project Hail Mary,Weir. Andy,Science,The Martian a lone astronaut must save the earth from disaster in this propulsive,90,/images/ProjectHailMary.jpg
+22,Evening is the Whole Day,Preeta Samarasan,Historical,A rich tapestry of family secrets in post-colonial Malaysia,32,/images/evening_whole_day.jpg
+23,A Brief History of Time,Stephen Hawking,Science,The landmark exploration of modern physics and the cosmos,32.99,/images/brief_history_time.jpg
+24,The Selfish Gene,Richard Dawkins,Science,The influential book on evolution and natural selection,29.99,/images/selfish_gene.jpg
+25,Silent Spring,Rachel Carson,Science,The groundbreaking environmental science classic,28.99,/images/silent_spring.jpg
+26,Once We Were There,Bernice Chauly,Romance,A love story set against the Reformasi movement in KL,31.99,/images/once_we_were_there.jpg
+27,The Japanese Lover,Meira Chand,Romance,A passionate romance set in wartime Singapore,28.99,/images/japanese_lover.jpg
+28,The Night Tiger,Yangsze Choo,Action,A page-turning adventure in 1930s colonial Malaya,31.99,/images/night_tiger.jpg
+29,The Soul of Malaya,Henry Fauconnier,Action,The book describes the experiences of two French planters with depicts various types of Englishmen running plantations in Malaya,50,/images/SoulMalaya.png
+42,The Ambassador's Wife,Jake Needham,Mystery,A complex murder mystery in Singapore,28.99,/images/ambassadors_wife.jpg
+40,,Rozlan Mohd Noor,Mystery,A police procedural featuring forensic analysis and methodical timeline reconstruction in KL,29.99,/images/21-Immortals.png

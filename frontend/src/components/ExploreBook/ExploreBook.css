@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 20px 2rem;
+    padding: 20px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .explore-book h1 {
@@ -33,26 +35,30 @@
     margin: 0;
 }
 
+/* Updated list container styles */
 .explore-book-list {
     display: flex;
-    gap: 28px;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 40px;
     overflow-x: auto;
-    padding: 10px 5px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    position: relative;
+    margin: 0 -40px;
 }
 
 .explore-book-list::-webkit-scrollbar {
     display: none;
 }
 
+/* Updated list item styles */
 .explore-book-list-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 120px;
     transition: transform 0.3s ease;
+    padding: 10px;
 }
 
 .explore-book-list-item:hover {
@@ -74,6 +80,7 @@
     color: #333;
     font-size: 1rem;
     font-weight: 500;
+    text-align: center;
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -97,8 +104,16 @@
 }
 
 /* Responsive Styles */
+@media (max-width: 1200px) {
+    .explore-book-list {
+        gap: 40px;
+        padding: 20px 30px;
+    }
+}
+
 @media (max-width: 768px) {
     .explore-book {
+        padding: 20px;
         gap: 20px;
     }
 
@@ -112,8 +127,9 @@
     }
 
     .explore-book-list {
-        gap: 15px;
-        padding: 5px 0;
+        gap: 30px;
+        padding: 15px;
+        margin: 0 -20px;
     }
 
     .explore-book-list-item img {
@@ -125,6 +141,11 @@
 @media (max-width: 480px) {
     .explore-book h1 {
         font-size: 1.75rem;
+    }
+
+    .explore-book-list {
+        gap: 20px;
+        padding: 10px;
     }
 
     .explore-book-list-item img {
