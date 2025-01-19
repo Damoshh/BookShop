@@ -1,6 +1,7 @@
 id,title,author,category,description,price,image
 1,The Garden of Evening Mists,Tan Twan Eng,Historical,A poignant story of love memory and war in the Cameron Highlands,35.50,/images/garden_of_evening_mists.jpeg
 2,To Kill a Mockingbird,Harper Lee,Historical,A classic novel exploring racial injustice in the Deep South,24.99,/images/to_kill_a_mockingbird.jpeg
+3,21 Immortals,Rozlan Mohd Noor,Mystery,A police procedural featuring forensic analysis and methodical timeline reconstruction in KL,29.99,/images/21-Immortals.png
 4,Sapiens: A Brief History of Humankind,Yuval Noah Harari,Historical,A fascinating journey through the history of humanity,29.99,/images/sapiens.jpg
 5,Malaysian Tales: Retold and Remixed,Edited by Daphne Lee,Romance,A collection of tales and folklores set in Malaysia,22.50,/images/malaysian_tales.jpg
 6,Pride and Prejudice,Jane Austen,Romance,A timeless tale of love and societal expectations,19.99,/images/pride_and_prejudice.jpg
@@ -27,5 +28,12 @@ id,title,author,category,description,price,image
 27,The Japanese Lover,Meira Chand,Romance,A passionate romance set in wartime Singapore,28.99,/images/japanese_lover.jpg
 28,The Night Tiger,Yangsze Choo,Action,A page-turning adventure in 1930s colonial Malaya,31.99,/images/night_tiger.jpg
 29,The Soul of Malaya,Henry Fauconnier,Action,The book describes the experiences of two French planters with depicts various types of Englishmen running plantations in Malaya,50,/images/SoulMalaya.png
-42,The Ambassador's Wife,Jake Needham,Mystery,A complex murder mystery in Singapore,28.99,/images/ambassadors_wife.jpg
-40,,Rozlan Mohd Noor,Mystery,A police procedural featuring forensic analysis and methodical timeline reconstruction in KL,29.99,/images/21-Immortals.png
+30,The Ambassador's Wife,Jake Needham,Mystery,A complex murder mystery in Singapore,28.99,/images/ambassadors_wife.jpg
+31,The Hobbit,J.R.R. Tolkien,Fantasy,The epic tale of Bilbo Baggins' adventurous journey to the Lonely Mountain,27.99,/images/the_hobbit.jpeg
+32,A Song of Ice and Fire: A Game of Thrones,George R.R. Martin,Fantasy,A gripping story of power struggles and intrigue in the Seven Kingdoms,35.00,/images/game_of_thrones.jpg
+33,Dracula,Bram Stoker,Horror,A chilling Gothic tale of Count Dracula's attempt to spread his undead curse,19.99,/images/dracula.jpeg
+34,The Shining,Stephen King,Horror,A haunting tale of madness and terror in a remote hotel,29.99,/images/the_shining.jpeg
+35,The Silence of the Lambs,Thomas Harris,Thriller,A psychological thriller featuring FBI agent Clarice Starling and Dr. Hannibal Lecter,28.50,/images/silence_of_the_lambs.png
+36,The Da Vinci Code,Dan Brown,Thriller,A gripping mystery involving religious secrets and historical puzzles,25.99,/images/da_vinci_code.jpg
+37,Matilda,Roald Dahl,Children,The inspiring tale of a bright girl with extraordinary abilities,17.99,/images/matilda.jpg
+38,The Cat in the Hat,Dr. Seuss,Children,A playful story of mischief caused by an eccentric cat,14.99,/images/cat_in_the_hat.png
