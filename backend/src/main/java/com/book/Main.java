@@ -162,6 +162,16 @@ public class Main {
                 orderHandler.handle(exchange);
             });
 
+            // General orders endpoint for fetching all orders
+            server.createContext("/api/orders", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                orderHandler.handle(exchange);
+            });
+
             // Start the server
             server.start();
             System.out.println("Server started on port 8000");
@@ -175,6 +185,7 @@ public class Main {
             System.out.println("- POST       /api/admin/login");
             System.out.println("- GET        /api/admin/dashboard");
             System.out.println("- GET        /api/admin/orders");
+            System.out.println("- GET        /api/orders");
             
         } catch (IOException e) {
             System.err.println("Server Error: " + e.getMessage());

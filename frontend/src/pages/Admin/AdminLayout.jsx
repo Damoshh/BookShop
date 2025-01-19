@@ -8,7 +8,9 @@ const AdminLayout = ({ children }) => {
     const userEmail = localStorage.getItem('userEmail');
 
     const onLogout = () => {
-        handleLogout(navigate);
+        handleLogout(navigate, null, null);
+        
+        window.location.href = '/';
     };
 
     return (
@@ -31,7 +33,6 @@ const AdminLayout = ({ children }) => {
             <div className="admin-content">
                 <nav className="admin-sidebar">
                     <Link to="/admin" className="admin-nav-link">Dashboard</Link>
-                    <Link to="/admin/profile" className="admin-nav-link">Profile</Link> 
                     <Link to="/admin/books" className="admin-nav-link">Manage Books</Link>
                     <Link to="/admin/orders" className="admin-nav-link">Orders</Link>
                 </nav>

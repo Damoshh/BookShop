@@ -1,5 +1,7 @@
 package com.book.handler;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -7,63 +9,112 @@ import java.nio.charset.StandardCharsets;
 import org.json.simple.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler; 
+import com.sun.net.httpserver.HttpHandler;
 
 public class AdminDashboardHandler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        
-        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, OPTIONS");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    private static final String BOOKS_CSV = "books.csv";
+    private static final String USERS_CSV = "users.csv";
+    private static final String ORDERS_CSV = "orders.csv";
 
-        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+    @Override
+    @SuppressWarnings({"unchecked", "UseSpecificCatch"})
+    public void handle(HttpExchange exchange) throws IOException {
+        if ("OPTIONS".equals(exchange.getRequestMethod())) {
             exchange.sendResponseHeaders(204, -1);
             return;
         }
 
-        
-        String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
-        if (authHeader == null || !validateAdminSession(authHeader)) {
-            sendResponse(exchange, 401, "Unauthorized");
-            return;
+        try {
+            JSONObject stats = new JSONObject();
+            
+            // Get total books
+            int totalBooks = countTotalBooks();
+            stats.put("totalBooks", totalBooks);
+            
+            // Get total users (excluding admins)
+            int totalUsers = countTotalUsers();
+            stats.put("totalUsers", totalUsers);
+            
+            // Get active orders (Pending status)
+            int activeOrders = countActiveOrders();
+            stats.put("activeOrders", activeOrders);
+            
+            // Get total sales (Delivered orders)
+            double totalSales = calculateTotalSales();
+            stats.put("totalSales", totalSales);
+
+            // Send response
+            String response = stats.toString();
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, responseBytes.length);
+            
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBytes);
+            }
+
+        } catch (Exception e) {
+            String response = "{\"error\": \"" + e.getMessage() + "\"}";
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(500, responseBytes.length);
+            
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBytes);
+            }
         }
+    }
 
-        if ("GET".equals(exchange.getRequestMethod())) {
-            handleGetDashboardData(exchange);
-        } else {
-            sendResponse(exchange, 405, "Method not allowed");
+    private int countTotalBooks() throws IOException {
+        int count = -1; // Start at -1 to exclude header
+        try (BufferedReader reader = new BufferedReader(new FileReader(BOOKS_CSV))) {
+            while (reader.readLine() != null) count++;
         }
+        return count;
     }
 
-    private boolean validateAdminSession(String authHeader) {
-        return authHeader.startsWith("Bearer ");
-    }
-
-    @SuppressWarnings("unchecked")
-    private void handleGetDashboardData(HttpExchange exchange) throws IOException {
-        JSONObject dashboardData = new JSONObject();
-        dashboardData.put("totalBooks", 100);  
-        dashboardData.put("totalUsers", 50);
-        dashboardData.put("totalOrders", 25);
-
-        sendJsonResponse(exchange, 200, dashboardData);
-    }
-
-    private void sendJsonResponse(HttpExchange exchange, int statusCode, JSONObject jsonResponse) throws IOException {
-        exchange.getResponseHeaders().set("Content-Type", "application/json");
-        byte[] responseBytes = jsonResponse.toString().getBytes(StandardCharsets.UTF_8);
-        exchange.sendResponseHeaders(statusCode, responseBytes.length);
-        
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(responseBytes);
+    private int countTotalUsers() throws IOException {
+        int count = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(USERS_CSV))) {
+            reader.readLine(); // Skip header
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values.length > 10 && values[10].equals("user")) {
+                    count++;
+                }
+            }
         }
+        return count;
     }
 
-    @SuppressWarnings("unchecked")
-    private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
-        JSONObject response = new JSONObject();
-        response.put("message", message);
-        sendJsonResponse(exchange, statusCode, response);
+    private int countActiveOrders() throws IOException {
+        int count = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(ORDERS_CSV))) {
+            reader.readLine(); // Skip header
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                if (values.length > 4 && values[4].equals("Pending")) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private double calculateTotalSales() throws IOException {
+        double total = 0.0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(ORDERS_CSV))) {
+            reader.readLine(); // Skip header
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                if (values.length > 4 && values[4].equals("Delivered")) {
+                    total += Double.parseDouble(values[2]); // totalAmount
+                }
+            }
+        }
+        return total;
     }
 }
