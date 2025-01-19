@@ -1,13 +1,13 @@
 /* AdminOverview.css */
 .admin-overview {
-    padding: 20px;
+    padding: 1rem;
     background: #F5F5F5;
     min-height: calc(100vh - 64px);
 }
 
 .dashboard-title {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     color: #1A1A1A;
     margin-bottom: 24px;
 }

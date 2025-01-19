@@ -105,6 +105,27 @@ const AdminOverview = () => {
   return (
     <div className="admin-overview">
       <h1 className="dashboard-title">Admin Dashboard</h1>
+      <div className="dashboard-section">
+        <h2 className="section-header">Dashboard Statistics</h2>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-number">{stats.totalBooks}</div>
+            <div className="stat-text">Total Books</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-number">{stats.activeOrders}</div>
+            <div className="stat-text">Active Orders</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-number">{stats.totalUsers}</div>
+            <div className="stat-text">Total Users</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-number">RM {stats.totalSales.toFixed(2)}</div>
+            <div className="stat-text">Total Sales</div>
+          </div>
+        </div>
+      </div>
       
       <div className="dashboard-section">
         <h2 className="section-header">Admin Profile</h2>
@@ -128,28 +149,6 @@ const AdminOverview = () => {
           <div>
             <label>Address</label>
             <p>{profile.address}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="dashboard-section">
-        <h2 className="section-header">Dashboard Statistics</h2>
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-number">{stats.totalBooks}</div>
-            <div className="stat-text">Total Books</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{stats.activeOrders}</div>
-            <div className="stat-text">Active Orders</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{stats.totalUsers}</div>
-            <div className="stat-text">Total Users</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">RM {stats.totalSales.toFixed(2)}</div>
-            <div className="stat-text">Total Sales</div>
           </div>
         </div>
       </div>

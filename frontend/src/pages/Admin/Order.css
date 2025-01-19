@@ -1,119 +1,379 @@
 .orders-page {
     padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .orders-page h2 {
-    margin-bottom: 20px;
     color: #333;
-}
-
-.orders-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 20px;
-}
-
-.orders-header {
+    font-size: 28px;
+    margin-bottom: 24px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
-.order-count {
-    font-size: 1.1rem;
-    color: #666;
-}
-
-.orders-table-container {
-    overflow-x: auto;
-}
-
-.orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.orders-table th,
-.orders-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.orders-table th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-weight: 600;
-}
-
-.orders-table tr:hover {
-    background-color: #f8f9fa;
-}
-
-.status-badge {
-    padding: 6px 12px;
+.orders-section {
+    background: white;
     border-radius: 12px;
-    font-size: 0.875rem;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pending-count {
+    font-size: 18px;
+    color: #22801e;
     font-weight: 500;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.status-pending {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.status-processing {
-    background-color: #cce5ff;
-    color: #004085;
-}
-
-.status-completed {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.status-cancelled {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.no-orders {
-    text-align: center;
-    color: #666;
-    padding: 40px !important;
-}
-
-.orders-loading {
+/* Loading and Error States */
+.orders-loading,
+.orders-error {
     text-align: center;
     padding: 40px;
+    font-size: 18px;
     color: #666;
 }
 
 .orders-error {
-    text-align: center;
-    padding: 20px;
     color: #dc3545;
-    background-color: #f8d7da;
-    border-radius: 4px;
-    margin: 20px 0;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
+/* Table Styles */
+.orders-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 24px;
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 16px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    color: #495057;
+    font-weight: 600;
+}
+
+.orders-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: top;
+}
+
+.customer-name {
+    color: #212529;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.customer-phone {
+    color: #6c757d;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-pending {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+.view-details-btn {
+    background: #22801e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.view-details-btn:hover {
+    background: #1a6517;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+    color: #22801e;
+    margin: 0;
+    font-size: 24px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6c757d;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.modal-close:hover {
+    background: #e9ecef;
+    color: #343a40;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.section-title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.section-title-container i {
+    font-size: 24px;
+    color: #22801e;
+}
+
+.section-title {
+    margin: 0;
+    color: #22801e;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.text-success {
+    color: #22801e;
+}
+
+.update-error {
+    color: #dc3545;
+    background: #f8d7da;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Delivery Information */
+.delivery-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 32px;
+}
+
+.delivery-line {
+    color: #495057;
+    line-height: 1.8;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.delivery-line:last-child {
+    margin-bottom: 0;
+}
+
+/* Order Items Table */
+.items-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 24px;
+    background: white;
+}
+
+.items-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.items-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.items-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Order Totals */
+.order-totals {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 24px 0;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: #495057;
+    font-size: 15px;
+}
+
+.total-row.final {
+    border-top: 2px solid #e9ecef;
+    margin-top: 8px;
+    padding-top: 16px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #212529;
+}
+
+/* Delivery Button */
+.delivery-btn {
+    background: #22801e;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    float: right;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delivery-btn:hover {
+    background: #1a6517;
+}
+
+/* Utility Classes */
+.mr-2 {
+    margin-right: 8px;
+}
+
+/* Font Awesome Icon Spacing */
+.fas {
+    line-height: 1;
+}
+
+/* Scrollbar Styles */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .orders-page {
+        padding: 16px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+
     .orders-table {
-        font-size: 14px;
+        display: block;
+        overflow-x: auto;
     }
-    
-    .orders-table th,
-    .orders-table td {
-        padding: 8px;
+
+    .delivery-btn {
+        width: 100%;
+        margin-top: 16px;
     }
-    
-    .status-badge {
-        padding: 4px 8px;
-        font-size: 0.75rem;
+}
+
+.success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #22801e;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1100;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
     }
 }

@@ -155,14 +155,24 @@ public class Main {
                 bookHandler.handle(exchange);
             });
 
-            // Order endpoints
-            server.createContext("/api/orders/update-status", exchange -> {
+            // For admin
+            server.createContext("/api/orders/admin/update-status", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
                     exchange.sendResponseHeaders(204, -1);
                     return;
                 }
-                orderHandler.handle(exchange);
+                orderHandler.handleAdminOrderUpdate(exchange);
+            });
+
+            // For user 
+            server.createContext("/api/orders/user/update-status", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                orderHandler.handleUserOrderUpdate(exchange);
             });
 
             // General orders endpoint for fetching all orders
