@@ -301,3 +301,105 @@
     align-items: flex-start;
     white-space: pre-wrap;
 }
+
+/* Add these styles to your existing Profile.css */
+
+.address-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.address-section h3 {
+    font-size: 1.25rem;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .address-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #22801e;
+    box-shadow: 0 0 0 3px rgba(34, 128, 30, 0.1);
+}
+
+.readonly-field {
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    color: #4b5563;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: flex-start;
+}
+
+.button-group button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-btn {
+    background-color: #22801e;
+    color: white;
+    border: none;
+}
+
+.save-btn:hover {
+    background-color: #1a6517;
+}
+
+.cancel-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+}
+
+.cancel-btn:hover {
+    background-color: #dc2626;
+}
+
+.edit-btn {
+    background-color: #22801e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-btn:hover {
+    background-color: #1a6517;
+}
