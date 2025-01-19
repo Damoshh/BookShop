@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import com.book.handler.AdminDashboardHandler;
 import com.book.handler.AdminHandler;
 import com.book.handler.BookHandler;
+import com.book.handler.BookManagementHandler;
 import com.book.handler.CartHandler;
 import com.book.handler.OrderHandler;
 import com.book.handler.SearchBookHandler;
@@ -28,6 +29,8 @@ public class Main {
             CartHandler cartHandler = new CartHandler();
             UserHandler userHandler = new UserHandler();
             OrderHandler orderHandler = new OrderHandler();
+            BookManagementHandler bookManagementHandler = new BookManagementHandler();
+
 
 
             // Book endpoints
@@ -170,6 +173,16 @@ public class Main {
                     return;
                 }
                 orderHandler.handle(exchange);
+            });
+
+            // In Main.java, add this context
+            server.createContext("/api/books/manage/", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                bookManagementHandler.handle(exchange);
             });
 
             // Start the server

@@ -1,23 +1,84 @@
 .manage-books {
     padding: 20px;
+    background-color: #f5f5f5;
 }
 
 .manage-books h2 {
     margin-bottom: 20px;
     color: #333;
+    font-size: 24px;
 }
 
+/* Table Styles */
+.manage-books table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.manage-books th,
+.manage-books td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.manage-books th {
+    background-color: #fff;
+    font-weight: 600;
+    color: #333;
+}
+
+.manage-books tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Actions Column */
+.manage-books td:last-child {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 3px;
+}
+
+.edit-btn {
+    color: #22801e;
+}
+
+.edit-btn:hover {
+    color: #1a6517;
+}
+
+.delete-btn {
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    color: #b02a37;
+}
+
+/* Add Form Styles */
 .add-book-form {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     max-width: 800px;
+    margin-top: 20px;
 }
 
 .add-book-form h3 {
-    margin-bottom: 20px;
     color: #22801e;
+    margin-bottom: 20px;
+    font-size: 20px;
 }
 
 .form-group {
@@ -28,6 +89,7 @@
     display: block;
     margin-bottom: 5px;
     color: #666;
+    font-weight: 500;
 }
 
 .form-group input,
@@ -40,28 +102,39 @@
     font-size: 14px;
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #22801e;
+    box-shadow: 0 0 0 2px rgba(34, 128, 30, 0.1);
+}
+
 .form-group textarea {
     min-height: 100px;
     resize: vertical;
 }
 
+/* Messages */
 .error-message {
     color: #dc3545;
-    margin-bottom: 15px;
-    padding: 10px;
     background-color: #ffe6e6;
+    padding: 10px;
     border-radius: 4px;
+    margin-bottom: 15px;
 }
 
 .success-message {
     color: #28a745;
-    margin-bottom: 15px;
-    padding: 10px;
     background-color: #e6ffe6;
+    padding: 10px;
     border-radius: 4px;
+    margin-bottom: 15px;
 }
 
-.submit-btn {
+/* Buttons */
+.submit-btn, 
+.toggle-form-btn {
     background-color: #22801e;
     color: white;
     border: none;
@@ -72,6 +145,87 @@
     transition: background-color 0.3s ease;
 }
 
-.submit-btn:hover {
+.submit-btn:hover,
+.toggle-form-btn:hover {
     background-color: #1a6517;
+}
+
+/* Hide Add Form button */
+.toggle-form-btn {
+    margin-bottom: 20px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Price Column */
+.manage-books td:nth-child(4) {
+    text-align: right;
+}
+
+/* Category Column */
+.manage-books td:nth-child(3) {
+    color: #22801e;
+    font-weight: 500;
+}
+
+/* Make table responsive */
+@media screen and (max-width: 768px) {
+    .manage-books {
+        padding: 10px;
+    }
+    
+    .manage-books table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .manage-books th,
+    .manage-books td {
+        padding: 8px 10px;
+    }
 }
