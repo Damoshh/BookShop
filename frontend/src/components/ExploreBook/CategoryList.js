@@ -40,11 +40,11 @@ export const category_list = [
         category_image: Category7
     },
     {
-        category_name: 'Science Fiction',
+        category_name: 'Science',
         category_image: Category8
     },
     {
-        category_name: 'Historical Fiction',
+        category_name: 'Historical',
         category_image: Category9
     },
     {
