@@ -69,6 +69,11 @@ public class OrderHandler implements HttpHandler {
                         handleCreateOrder(exchange);
                     }
                 }
+                case "PUT" -> {
+                    if (path.endsWith("/update-status")) {
+                        handleUpdateStatus(exchange);
+                    }
+                }
                 case "GET" -> {
                     if (path.contains("/user/")) {
                         handleGetUserOrders(exchange);
@@ -319,5 +324,88 @@ public class OrderHandler implements HttpHandler {
         JSONObject response = new JSONObject();
         response.put("message", message);
         sendJsonResponse(exchange, statusCode, response);
+    }
+
+    @SuppressWarnings({ "UseSpecificCatch", "unchecked", "CallToPrintStackTrace" })
+    private void handleUpdateStatus(HttpExchange exchange) throws IOException {
+        try {
+            // Read request body
+            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder requestBody = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                requestBody.append(line);
+            }
+    
+            JSONObject updateData = (JSONObject) new JSONParser().parse(requestBody.toString());
+            String orderId = (String) updateData.get("orderId");
+            String newStatus = (String) updateData.get("status");
+    
+            // Read the current orders
+            String currentDir = System.getProperty("user.dir");
+            File inputFile = new File(currentDir, ORDERS_CSV);
+            File tempFile = new File(currentDir, "orders_temp.csv");
+            
+            try {
+                if (!tempFile.exists()) {
+                    tempFile.createNewFile();
+                }
+    
+                boolean orderFound = false;
+                try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+                     BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+                    
+                    // Write header
+                    String header = reader.readLine();
+                    writer.write(header + "\n");
+    
+                    // Update only the matching order's status
+                    String orderLine;
+                    while ((orderLine = reader.readLine()) != null) {
+                        String[] values = orderLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                        
+                        // Only update status if it matches the orderId AND current status is 'Delivery'
+                        if (values[0].equals(orderId) && values[4].equals("Delivery")) {
+                            values[4] = newStatus;
+                            writer.write(String.join(",", values) + "\n");
+                            orderFound = true;
+                        } else {
+                            writer.write(orderLine + "\n");
+                        }
+                    }
+                }
+    
+                if (!orderFound) {
+                    sendResponse(exchange, 400, "Order not found or not in Delivery status");
+                    return;
+                }
+    
+                // Replace original file with updated file
+                if (!inputFile.delete()) {
+                    throw new IOException("Could not delete original orders file");
+                }
+    
+                if (!tempFile.renameTo(inputFile)) {
+                    throw new IOException("Could not rename temp file");
+                }
+    
+                // Send success response
+                JSONObject response = new JSONObject();
+                response.put("message", "Order status updated successfully");
+                sendJsonResponse(exchange, 200, response);
+    
+            } catch (IOException e) {
+                if (tempFile.exists()) {
+                    tempFile.delete();
+                }
+                throw e;
+            }
+    
+        } catch (Exception e) {
+            System.err.println("Error updating order status: " + e.getMessage());
+            e.printStackTrace();
+            sendResponse(exchange, 500, "Error updating order status: " + e.getMessage());
+        }
     }
 }

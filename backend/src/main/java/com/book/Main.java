@@ -152,6 +152,16 @@ public class Main {
                 bookHandler.handle(exchange);
             });
 
+            // Order endpoints
+            server.createContext("/api/orders/update-status", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                orderHandler.handle(exchange);
+            });
+
             // Start the server
             server.start();
             System.out.println("Server started on port 8000");
