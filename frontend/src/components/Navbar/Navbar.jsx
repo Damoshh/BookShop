@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { StoreContext } from '../../context/StoreContext';
 import { handleLogout } from '../../utils/auth.js';
+import logo from '../../assets/logoReadify.png'
 
 const Navbar = ({
   setShowLogin,
@@ -74,7 +75,8 @@ const Navbar = ({
   return (
     <nav className='navbar'>
       <Link to='/' className='nav-logo'>
-        Readify.
+        <img src={logo} alt=''/>
+        <h4>Readify.</h4>
       </Link>
 
       <div className='nav-search'>

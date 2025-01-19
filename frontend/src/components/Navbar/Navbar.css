@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: white;
+  background: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 80px;
   width: 100%;
@@ -116,11 +116,25 @@
 
 /* Logo */
 .nav-logo {
+  display: flex;
+  margin: auto 2rem auto 0;
+  gap: 1rem;
+}
+
+.nav-logo h4{
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
   text-decoration: none;
-  flex-shrink: 0; /* Prevent logo from shrinking */
+  flex-shrink: 0;
+  margin: auto 0;
+  color: #16a34a;
+}
+
+
+.nav-logo img{
+  max-width: 2rem;
+  background-color: transparent;
 }
 
 /* Search section */
@@ -215,6 +229,7 @@
   justify-content: center;
   border: none;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .cart-link i {
