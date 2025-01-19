@@ -35,8 +35,7 @@
 
 .explore-book-list {
     display: flex;
-    gap: 20px;
-    margin: 20px 0;
+    gap: 28px;
     overflow-x: auto;
     padding: 10px 5px;
     -webkit-overflow-scrolling: touch;
