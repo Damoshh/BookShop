@@ -1,12 +1,20 @@
 package com.book.handler;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -28,6 +36,7 @@ public class UserHandler implements HttpHandler {
     }
 
     @Override
+    @SuppressWarnings({"ConvertToStringSwitch", "UseSpecificCatch", "CallToPrintStackTrace"})
     public void handle(HttpExchange exchange) throws IOException {
         // CORS is handled in Main.java
         if ("OPTIONS".equals(exchange.getRequestMethod())) {
@@ -59,6 +68,7 @@ public class UserHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings({"ConvertToStringSwitch", "UseSpecificCatch", "CallToPrintStackTrace"})
     private void handlePost(HttpExchange exchange) throws IOException {
         try {
             String requestBody = readRequestBody(exchange);
@@ -85,6 +95,7 @@ public class UserHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void handleRegister(HttpExchange exchange, JSONObject json) throws IOException {
         String name = (String) json.get("name");
         String email = (String) json.get("email");
@@ -134,6 +145,7 @@ public class UserHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void handleGetProfile(HttpExchange exchange) throws IOException {
         String query = exchange.getRequestURI().getQuery();
         if (query == null || !query.startsWith("email=")) {
@@ -248,6 +260,7 @@ public class UserHandler implements HttpHandler {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     private JSONObject validateUserAndGetDetails(String email, String password) throws IOException {
         File file = new File(CSV_FILE);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -287,6 +300,7 @@ public class UserHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
         JSONObject response = new JSONObject();
         response.put("message", message);

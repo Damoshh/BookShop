@@ -8,13 +8,13 @@ import com.book.handler.AdminDashboardHandler;
 import com.book.handler.AdminHandler;
 import com.book.handler.BookHandler;
 import com.book.handler.CartHandler;
-/*import com.book.handler.OrderHandler;*/
 import com.book.handler.SearchBookHandler;
 import com.book.handler.UserHandler;
-import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
 
 public class Main {
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void main(String[] args) {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
@@ -160,6 +160,7 @@ public class Main {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private static void enableCors(HttpExchange exchange) {
         // Remove any existing CORS headers first
         exchange.getResponseHeaders().remove("Access-Control-Allow-Origin");

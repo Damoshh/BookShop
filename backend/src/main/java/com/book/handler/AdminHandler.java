@@ -1,6 +1,11 @@
 package com.book.handler;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +19,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class AdminHandler implements HttpHandler {
     private static final String ADMIN_CSV = "admins.csv";
+    @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> activeSessionTokens = new HashMap<>();
 
     private void setCorsHeaders(HttpExchange exchange) {
@@ -25,6 +31,7 @@ public class AdminHandler implements HttpHandler {
     }
 
     @Override
+    @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
     public void handle(HttpExchange exchange) throws IOException {
         // Set CORS headers first
         setCorsHeaders(exchange);
@@ -61,7 +68,7 @@ public class AdminHandler implements HttpHandler {
         return java.util.UUID.randomUUID().toString();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "UseSpecificCatch", "CallToPrintStackTrace"})
     private void handleAdminLogin(HttpExchange exchange) throws IOException {
         System.out.println("Starting admin login handler...");
         
@@ -152,6 +159,7 @@ public class AdminHandler implements HttpHandler {
         return email != null && email.toLowerCase().endsWith("@readify.com");
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private boolean validateAdmin(String email, String password) {
         if (!validateEmail(email)) {
             System.out.println("Email validation failed for: " + email);
@@ -201,6 +209,7 @@ public class AdminHandler implements HttpHandler {
         return storedToken != null && storedToken.equals(token);
     }
 
+    @SuppressWarnings("unchecked")
     private void handleAdminProfile(HttpExchange exchange) throws IOException {
         if (!"GET".equals(exchange.getRequestMethod())) {
             sendResponse(exchange, 405, "Method not allowed");

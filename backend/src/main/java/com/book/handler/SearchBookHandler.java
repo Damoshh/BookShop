@@ -23,13 +23,14 @@ public class SearchBookHandler implements HttpHandler {
     private static final String BOOKS_CSV_PATH = "books.csv";
 
     @Override
+    @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
     public void handle(HttpExchange exchange) throws IOException {
         if ("OPTIONS".equals(exchange.getRequestMethod())) {
             exchange.sendResponseHeaders(204, -1);
             return;
         }
 
-        String response = "";
+        String response;
         int statusCode = 200;
 
         try {
