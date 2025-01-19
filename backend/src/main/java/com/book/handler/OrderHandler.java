@@ -26,6 +26,7 @@ public class OrderHandler implements HttpHandler {
         initializeOrdersFile();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void initializeOrdersFile() {
         try {
             String currentDir = System.getProperty("user.dir");
@@ -96,7 +97,7 @@ public class OrderHandler implements HttpHandler {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "resource", "CallToPrintStackTrace", "UseSpecificCatch" })
+    @SuppressWarnings({ "unchecked", "CallToPrintStackTrace", "UseSpecificCatch" })
     private void handleCreateOrder(HttpExchange exchange) throws IOException {
         try {
             System.out.println("Starting order creation process...");
