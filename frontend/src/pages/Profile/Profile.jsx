@@ -65,22 +65,31 @@ const Profile = ({ userEmail }) => {
 
     const handleReceived = async (orderId) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/orders/update-status`, {
+            const response = await fetch('http://localhost:8000/api/orders/user/update-status', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`
                 },
                 body: JSON.stringify({
                     orderId,
                     status: 'Delivered'
                 })
             });
-
-            if (response.ok) {
-                fetchOrders();
+    
+            if (!response.ok) {
+                throw new Error('Failed to update order status');
             }
+    
+            // Refresh orders after successful update
+            await fetchOrders();
+            
+            // Add success feedback
+            alert("Order has been successfully marked as delivered!");
+    
         } catch (error) {
             console.error('Error updating order status:', error);
+            alert('Failed to update order status. Please try again.');
         }
     };
 
