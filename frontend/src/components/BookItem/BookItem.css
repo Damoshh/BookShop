@@ -1,23 +1,43 @@
+/* Book Display Container */
+.book-display {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Book Item Styles */
 .single-book-item {
-    width: 100%;
-    max-width: 20rem;
-    margin: auto;
+    width: 280px;
+    height: 500px;
     border-radius: 15px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    animation: bookItemFadeIn 1s;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     background-color: white;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: bookItemFadeIn 1s;
 }
 
 .single-book-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Image Container */
 .single-book-img-container {
-    position: relative;
     width: 100%;
-    height: 16rem;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
 }
 
 .single-book-image {
@@ -27,27 +47,25 @@
     border-radius: 15px 15px 0 0;
 }
 
+/* Action Buttons */
 .single-book-actions {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 12px;
+    right: 12px;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px;
     border-radius: 9999px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10;
 }
 
-.single-book-actions i {
-    font-size: 1.5rem;
+.single-book-add,
+.single-book-remove {
     cursor: pointer;
     transition: transform 0.2s ease;
-    padding: 0.25rem;
-}
-
-.single-book-actions i:hover {
-    transform: scale(1.1);
+    padding: 4px;
 }
 
 .single-book-add {
@@ -58,59 +76,104 @@
     color: #dc2626;
 }
 
+.single-book-add:hover,
+.single-book-remove:hover {
+    transform: scale(1.1);
+}
+
+/* Counter Style */
 .single-book-counter {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 8px;
 }
 
 .single-book-counter span {
-    min-width: 1.5rem;
+    min-width: 24px;
     text-align: center;
-    font-weight: 500;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 16px;
     color: #333;
 }
 
+/* Book Information */
 .single-book-info {
-    padding: 1rem;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
 }
 
 .single-book-title {
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: #1a1a1a;
-}
-
-.single-book-author,
-.single-book-category {
-    color: #666;
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-}
-
-.single-book-description {
-    color: #4b5563;
-    font-size: 0.875rem;
-    line-height: 1.5;
+    margin-bottom: 4px;
+    line-height: 1.4;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    margin-bottom: 0.75rem;
+}
+
+.single-book-author {
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.single-book-category {
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-bottom: 4px;
+}
+
+.single-book-description {
+    color: #4b5563;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    margin: 8px 0;
+    flex-grow: 1;
 }
 
 .single-book-price {
     color: #16a34a;
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
 }
 
+/* Loading and Error States */
+.loading-message,
+.error-message,
+.empty-display {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.25rem;
+}
+
+.loading-message,
+.empty-display {
+    color: #666;
+}
+
+.error-message {
+    color: #dc2626;
+}
+
+/* Animation */
 @keyframes bookItemFadeIn {
     from {
         opacity: 0;
-        transform: translateY(1rem);
+        transform: translateY(16px);
     }
     to {
         opacity: 1;
@@ -118,13 +181,24 @@
     }
 }
 
-/* Media query adjustments */
+/* Media Queries */
 @media (max-width: 640px) {
-    .single-book-item {
-        max-width: 100%;
+    .book-display {
+        padding: 10px;
     }
     
-    .single-book-img-container {
-        height: 14rem;
+    .book-grid {
+        gap: 10px;
     }
+
+    .single-book-item {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+}
+
+/* Fix for Font Awesome icons */
+.fa-solid {
+    font-size: 1.25rem;
 }

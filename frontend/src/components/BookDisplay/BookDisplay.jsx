@@ -30,10 +30,10 @@ const BookDisplay = ({ category, isLoggedIn, setShowLogin, setInitialState }) =>
                 }
         
                 const validatedBooks = data.map(book => {
-                    console.log('Processing book:', book);  // Debug log for each book
+                    console.log('Processing book:', book); 
                     return {
                         _id: book._id,
-                        title: book.title || book.name,  // Try both title and name
+                        title: book.title || book.name, 
                         author: book.author || 'Unknown Author',
                         category: book.category || 'Uncategorized',
                         description: book.description || '',

@@ -33,7 +33,7 @@ const Navbar = ({
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
     await handleLogout(navigate, setIsLoggedIn, setUserEmail);
-};
+  };
 
   const handleSearch = async (e) => {
     const query = e.target.value;

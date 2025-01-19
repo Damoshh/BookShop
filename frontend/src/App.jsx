@@ -32,8 +32,6 @@ const LayoutWrapper = ({
   setIsLoggedIn, 
   setUserEmail, 
   initialState, 
-  theme, 
-  setTheme, 
   isLoggedIn, 
   userEmail, 
   setInitialState,
@@ -56,8 +54,6 @@ const LayoutWrapper = ({
       
       {!isAdminPage && (
         <Navbar 
-          theme={theme} 
-          setTheme={setTheme} 
           setShowLogin={setShowLogin}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
@@ -68,7 +64,7 @@ const LayoutWrapper = ({
         />
       )}
       
-      <main className={`min-h-screen ${theme}`}>
+      <main className="min-h-screen">
         {children}
       </main>
       
@@ -78,11 +74,6 @@ const LayoutWrapper = ({
 };
 
 function App() {
-  // Theme state
-  const [theme, setTheme] = useState(() => 
-    localStorage.getItem("current_theme") || "light"
-  );
-
   // Auth states
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(() => isAuthenticated());
@@ -91,11 +82,6 @@ function App() {
     localStorage.getItem('userEmail') || ''
   );
   const [initialState, setInitialState] = useState('Login');
-
-  // Persist theme changes
-  useEffect(() => {
-    localStorage.setItem("current_theme", theme);
-  }, [theme]);
 
   // Check authentication status on mount and when auth-related storage changes
   useEffect(() => {
@@ -121,17 +107,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('Auth State:', {
-      sessionToken: localStorage.getItem('sessionToken'),
-      userEmail: localStorage.getItem('userEmail'),
-      userId: localStorage.getItem('userId'),
-      userRole: localStorage.getItem('userRole'),
-      isLoggedIn: isLoggedIn,
-      showLogin: showLogin
-    });
-  }, [isLoggedIn, showLogin]);
-
   return (
     <StoreContextProvider>
       <Router>
@@ -141,8 +116,6 @@ function App() {
           setIsLoggedIn={setIsLoggedIn}
           setUserEmail={setUserEmail}
           initialState={initialState}
-          theme={theme}
-          setTheme={setTheme}
           isLoggedIn={isLoggedIn}
           userEmail={userEmail}
           setInitialState={setInitialState}
