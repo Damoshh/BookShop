@@ -8,6 +8,7 @@ import com.book.handler.AdminDashboardHandler;
 import com.book.handler.AdminHandler;
 import com.book.handler.BookHandler;
 import com.book.handler.CartHandler;
+import com.book.handler.OrderHandler;
 import com.book.handler.SearchBookHandler;
 import com.book.handler.UserHandler;
 import com.sun.net.httpserver.HttpExchange;
@@ -26,6 +27,8 @@ public class Main {
             SearchBookHandler searchBookHandler = new SearchBookHandler();  // Add this line
             CartHandler cartHandler = new CartHandler();
             UserHandler userHandler = new UserHandler();
+            OrderHandler orderHandler = new OrderHandler();
+
 
             // Book endpoints
             server.createContext("/api/books", exchange -> {
@@ -121,16 +124,25 @@ public class Main {
                 }
                 new AdminDashboardHandler().handle(exchange);
             });
-/*
-            server.createContext("/api/admin/orders", exchange -> {
+            
+            // Add these endpoints
+            server.createContext("/api/orders/create", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
                     exchange.sendResponseHeaders(204, -1);
                     return;
                 }
-                new OrderHandler(adminHandler).handle(exchange);
+                orderHandler.handle(exchange);
             });
- */
+
+            server.createContext("/api/orders/user/", exchange -> {
+                enableCors(exchange);
+                if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                    exchange.sendResponseHeaders(204, -1);
+                    return;
+                }
+                orderHandler.handle(exchange);
+            });
             server.createContext("/api/books/category/", exchange -> {
                 enableCors(exchange);
                 if ("OPTIONS".equals(exchange.getRequestMethod())) {
