@@ -12,10 +12,6 @@ import Category10 from '../../assets/10.png'
 
 export const category_list = [
     {
-        category_name: 'Non-Fiction',
-        category_image: Category1
-    },
-    {
         category_name: 'Romance',
         category_image: Category2
     },
