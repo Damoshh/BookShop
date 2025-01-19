@@ -25,10 +25,15 @@ public class CartHandler implements HttpHandler {
     private static final String CART_CSV_PATH = "cartItems.csv";
 
     public static class CartResponse {
+        @SuppressWarnings("FieldMayBeFinal")
         private List<CartItem> items;
+        @SuppressWarnings("FieldMayBeFinal")
         private int totalItems;
+        @SuppressWarnings("FieldMayBeFinal")
         private double totalAmount;
+        @SuppressWarnings("FieldMayBeFinal")
         private double deliveryFee;
+        @SuppressWarnings("FieldMayBeFinal")
         private double grandTotal;
 
         public CartResponse(List<CartItem> items, int totalItems, double totalAmount, 
@@ -65,7 +70,7 @@ public class CartHandler implements HttpHandler {
         }
 
         // Regular requests
-        String userId = null;
+        String userId;
         CartResponse cart = null;
 
         if ("GET".equals(method)) {

@@ -1,24 +1,33 @@
 package com.book.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.stream.Collectors;
-import java.io.*;
-import java.util.*;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 public class BookHandler implements HttpHandler {
     private static final String BOOKS_CSV_PATH = "books.csv";
 
     @Override
+    @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
     public void handle(HttpExchange exchange) throws IOException {
         if ("OPTIONS".equals(exchange.getRequestMethod())) {
             exchange.sendResponseHeaders(204, -1);
             return;
         }
 
-        String response = "";
+        String response;
         int statusCode = 200;
 
         try {
