@@ -1,15 +1,25 @@
 package com.book.handler;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.book.model.CartItem;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONObject;
-import org.json.JSONArray;
-
-import java.io.*;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class CartHandler implements HttpHandler {
     private static final String CART_CSV_PATH = "cartItems.csv";
@@ -39,6 +49,7 @@ public class CartHandler implements HttpHandler {
     }
 
     @Override
+    @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
     public void handle(HttpExchange exchange) throws IOException {
     String response = "";
     int statusCode = 200;
@@ -234,6 +245,7 @@ public class CartHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("UnnecessaryTemporaryOnConversionFromString")
     private List<CartItem> readCartItems() throws IOException {
         List<CartItem> items = new ArrayList<>();
         File file = new File(CART_CSV_PATH);
